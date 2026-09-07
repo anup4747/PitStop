@@ -1,0 +1,482 @@
+/* =========================================================
+   PITSTOP SOLUTIONS - 4 CREW TEAM MEMBERS (REFERENCE LAYOUT)
+   ========================================================= */
+
+.team-page {
+  min-height: 100vh;
+  padding: 60px 5vw 100px;
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background subtle grid texture */
+.team-page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(239, 73, 56, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(239, 73, 56, 0.035) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+
+/* Header Section */
+.team-header {
+  max-width: 800px;
+  margin: 0 auto 55px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.team-header .eyebrow {
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.team-header h1 {
+  font: 800 clamp(44px, 5.5vw, 72px)/0.9 var(--font-display);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0 0 16px;
+}
+
+.team-header h1 em {
+  color: var(--red);
+  font-style: italic;
+}
+
+.team-header p {
+  color: var(--muted);
+  font: 400 14.5px/1.6 var(--font-mono);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* =========================================================
+   4-MEMBER CREW GRID (MATCHING PROVIDED DESIGN SPEC)
+   ========================================================= */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.member-card {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.member-card:hover,
+.member-card:focus-within {
+  z-index: 99;
+}
+
+/* Image Container: Clean Generous Rounded Corners */
+.member-image-box {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #141312;
+  border: 1px solid var(--line);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.member-card:hover .member-image-box {
+  border-color: var(--red);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.7), 0 0 20px rgba(239, 73, 56, 0.2);
+}
+
+.member-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  border-radius: 22px;
+  transition: transform 0.45s ease, filter 0.45s ease;
+}
+
+/* ---------------------------------------------------------
+   RASTER PATTERN EFFECT (HOVER ACTIVATED)
+   --------------------------------------------------------- */
+.raster-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  z-index: 2;
+  /* Dual Halftone Dot Matrix Texture */
+  background-image: 
+    radial-gradient(circle at center, #ef4938 1.4px, transparent 1.6px),
+    radial-gradient(circle at center, #000000 1.2px, transparent 1.4px),
+    repeating-linear-gradient(0deg, rgba(239, 73, 56, 0.1) 0px, rgba(239, 73, 56, 0.1) 1px, transparent 1px, transparent 3px);
+  background-size: 5px 5px, 5px 5px, 100% 3px;
+  background-position: 0 0, 2.5px 2.5px, 0 0;
+  mix-blend-mode: screen;
+}
+
+.raster-scanline {
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(239, 73, 56, 0.22) 50%, transparent 100%);
+  height: 35%;
+  z-index: 3;
+  transition: opacity 0.2s ease;
+}
+
+/* Image Raster Shift on Hover */
+.member-card:hover .member-image {
+  transform: scale(1.05);
+  filter: grayscale(100%) contrast(170%) brightness(1.08);
+}
+
+.member-card:hover .raster-overlay {
+  opacity: 0.9;
+}
+
+.member-card:hover .raster-scanline {
+  opacity: 1;
+  animation: sweepRaster 2.5s infinite linear;
+}
+
+@keyframes sweepRaster {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(300%); }
+}
+
+/* ---------------------------------------------------------
+   OVERLAPPING HOVER WINDOW: BIO & CONTACT POPUP
+   (Expands wider than individual member & overlaps neighbors)
+   --------------------------------------------------------- */
+.member-hover-window {
+  position: absolute;
+  top: 0;
+  width: 360px;
+  max-width: 88vw;
+  background: rgba(16, 15, 14, 0.97);
+  backdrop-filter: blur(18px);
+  border: 1.5px solid var(--red);
+  border-radius: 18px;
+  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.95), 0 0 35px rgba(239, 73, 56, 0.35);
+  z-index: 999;
+  padding: 22px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* LEFT COLUMN (odd: 1 & 3) → Window slides in to the RIGHT */
+.team-grid .member-card:nth-child(odd) .member-hover-window {
+  left: calc(100% + 18px);
+  right: auto;
+  transform: translateX(-12px) scale(0.96);
+}
+
+.team-grid .member-card:nth-child(odd):hover .member-hover-window,
+.team-grid .member-card:nth-child(odd):focus-within .member-hover-window {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
+}
+
+/* RIGHT COLUMN (even: 2 & 4) → Window slides in to the LEFT */
+.team-grid .member-card:nth-child(even) .member-hover-window {
+  right: calc(100% + 18px);
+  left: auto;
+  transform: translateX(12px) scale(0.96);
+}
+
+.team-grid .member-card:nth-child(even):hover .member-hover-window,
+.team-grid .member-card:nth-child(even):focus-within .member-hover-window {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
+}
+
+/* Window Header */
+.window-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid rgba(239, 73, 56, 0.25);
+  padding-bottom: 12px;
+}
+
+.window-name {
+  font: 800 24px/1 var(--font-display);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0 0 4px;
+}
+
+.window-role {
+  font: 500 12px var(--font-mono);
+  letter-spacing: 0.05em;
+  color: var(--red);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.window-meta-badges {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.window-callsign {
+  color: #ff9d92;
+  font: 700 11px var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(239, 73, 56, 0.2);
+  border: 1px solid rgba(239, 73, 56, 0.4);
+  padding: 2px 7px;
+  border-radius: 3px;
+}
+
+.window-dept {
+  color: #888;
+  font: 400 10.5px var(--font-mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.window-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.window-bio {
+  color: #e4e0da;
+  font: 400 12.5px/1.6 var(--font-mono);
+  margin: 0;
+}
+
+.window-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.window-skill-pill {
+  background: #232120;
+  border: 1px solid #383533;
+  color: #ff9d92;
+  font: 500 10px var(--font-mono);
+  letter-spacing: 0.04em;
+  padding: 3px 7px;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+
+/* Contacts within the hover window */
+.window-contacts {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.window-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ccc;
+  font: 400 11.5px var(--font-mono);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.window-contact-item:hover {
+  color: var(--red);
+}
+
+.window-contact-item svg {
+  color: var(--red);
+  flex-shrink: 0;
+}
+
+.window-social-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.window-social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 10px;
+  background: #201e1d;
+  border: 1px solid var(--line-strong);
+  color: #fff;
+  font: 600 10.5px var(--font-mono);
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  text-transform: uppercase;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.window-social-btn:hover {
+  background: var(--red);
+  border-color: var(--red);
+  color: #fff;
+  box-shadow: 0 3px 12px rgba(239, 73, 56, 0.45);
+}
+
+/* ---------------------------------------------------------
+   CLEAN NAME & ROLE BELOW IMAGE (LIKE PROVIDED IMAGE)
+   --------------------------------------------------------- */
+.member-caption {
+  padding: 16px 2px 4px;
+}
+
+.member-title {
+  font: 700 24px/1.2 var(--font-display);
+  letter-spacing: 0.01em;
+  color: #fff;
+  margin: 0 0 4px;
+  transition: color 0.2s;
+}
+
+.member-card:hover .member-title {
+  color: var(--red);
+}
+
+.member-subtitle {
+  color: var(--muted);
+  font: 400 13px var(--font-mono);
+  letter-spacing: 0.03em;
+  margin: 0;
+}
+
+/* Recruitment CTA Banner */
+.team-join-banner {
+  max-width: 1280px;
+  margin: 75px auto 0;
+  background: #151413;
+  border: 1px solid var(--line-strong);
+  border-radius: 16px;
+  padding: 38px 45px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  position: relative;
+  overflow: hidden;
+}
+
+.team-join-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--red);
+}
+
+.join-content h2 {
+  font: 800 32px/1 var(--font-display);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0 0 8px;
+}
+
+.join-content p {
+  color: var(--muted);
+  font: 400 13.5px var(--font-mono);
+  margin: 0;
+}
+
+.join-btn {
+  background: var(--red);
+  color: #fff;
+  text-decoration: none;
+  padding: 13px 26px;
+  font: 700 14.5px var(--font-display);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  border-radius: 4px;
+  transition: all 0.2s;
+  box-shadow: 0 4px 16px rgba(239, 73, 56, 0.3);
+}
+
+.join-btn:hover {
+  background: var(--red-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(239, 73, 56, 0.5);
+}
+
+/* ---------------------------------------------------------
+   RESPONSIVE BREAKPOINTS
+   --------------------------------------------------------- */
+/* On small screens, stack to single column and show window below */
+@media (max-width: 640px) {
+  .team-grid {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  /* On mobile, window appears below the card image */
+  .team-grid .member-card:nth-child(odd) .member-hover-window,
+  .team-grid .member-card:nth-child(even) .member-hover-window {
+    left: 0;
+    right: 0;
+    top: calc(100% + 10px);
+    transform: translateY(-8px) scale(0.96);
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .team-grid .member-card:nth-child(odd):hover .member-hover-window,
+  .team-grid .member-card:nth-child(odd):focus-within .member-hover-window,
+  .team-grid .member-card:nth-child(even):hover .member-hover-window,
+  .team-grid .member-card:nth-child(even):focus-within .member-hover-window {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+
+  .team-join-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 28px 20px;
+  }
+}
