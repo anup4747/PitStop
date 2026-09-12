@@ -1,6 +1,6 @@
-import { Link, useNavigate, useLocation } from 'react-router-dom'
-import logoDark from '../assets/logo.png'
-import logoLight from '../assets/logoLight.png'
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import logoDark from "../assets/logo.png";
+import logoLight from "../assets/logoLight.png";
 
 const icon = (name) => {
   const paths = {
@@ -10,7 +10,7 @@ const icon = (name) => {
         <path d="m13 6 6 6-6 6" />
       </>
     ),
-  }
+  };
   return (
     <svg
       className="icon"
@@ -24,46 +24,60 @@ const icon = (name) => {
     >
       {paths[name]}
     </svg>
-  )
-}
+  );
+};
 
 function Footer({ theme }) {
-  const navigate = useNavigate()
-  const location = useLocation()
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleNavClick = (hash) => {
-    if (location.pathname !== '/') {
-      navigate('/' + hash)
+    if (location.pathname !== "/") {
+      navigate("/" + hash);
     } else {
-      const element = document.querySelector(hash)
+      const element = document.querySelector(hash);
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth' })
+        element.scrollIntoView({ behavior: "smooth" });
       }
     }
-  }
+  };
 
   return (
     <footer id="journal">
       <div className="footer-brand">
-        <Link to="/" className="footer-brand-link" aria-label="Pitstop Solutions home">
+        <Link
+          to="/"
+          className="footer-brand-link"
+          aria-label="Pitstop Solutions home"
+        >
           <img
-            src={theme === 'light' ? logoLight : logoDark}
+            src={theme === "light" ? logoLight : logoDark}
             alt="Pitstop Solutions"
             className="footer-logo-img"
           />
         </Link>
         <h2>
-          Keep your
-        </h2>
-        <h2>
+          Keep your <br />
           <em>line tight.</em>
         </h2>
         <div className="footer-quick-links">
-          <a href="#shop" onClick={(e) => { e.preventDefault(); handleNavClick('#shop'); }}>
+          <a
+            href="#shop"
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavClick("#shop");
+            }}
+          >
             Shop Parts
           </a>
           <span>/</span>
-          <a href="#why-us" onClick={(e) => { e.preventDefault(); handleNavClick('#why-us'); }}>
+          <a
+            href="#why-us"
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavClick("#why-us");
+            }}
+          >
             Why Pitstop
           </a>
           <span>/</span>
@@ -80,7 +94,12 @@ function Footer({ theme }) {
           <span></span> The pitstop list
         </p>
         <p>New parts, build notes, and track-day stories. No noise.</p>
-        <form onSubmit={(event) => { event.preventDefault(); alert('Subscribed to Pitstop telemetry dispatch!'); }}>
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            alert("Subscribed to Pitstop telemetry dispatch!");
+          }}
+        >
           <input
             type="email"
             placeholder="Your email address"
@@ -88,7 +107,7 @@ function Footer({ theme }) {
             required
           />
           <button type="submit" aria-label="Subscribe">
-            {icon('arrow')}
+            {icon("arrow")}
           </button>
         </form>
       </div>
@@ -96,15 +115,27 @@ function Footer({ theme }) {
       <div className="footer-meta">
         <span>© 2026 Pitstop Solutions • Engineered for Apex Performance</span>
         <div className="footer-socials">
-          <a href="https://instagram.com" target="_blank" rel="noreferrer">Instagram</a>
+          <a href="https://instagram.com" target="_blank" rel="noreferrer">
+            Instagram
+          </a>
           <span>•</span>
-          <a href="https://youtube.com" target="_blank" rel="noreferrer">YouTube</a>
+          <a href="https://youtube.com" target="_blank" rel="noreferrer">
+            YouTube
+          </a>
           <span>•</span>
-          <a href="#discord" onClick={(e) => { e.preventDefault(); alert('Discord telemetry server opening soon!'); }}>Discord Paddock</a>
+          <a
+            href="#discord"
+            onClick={(e) => {
+              e.preventDefault();
+              alert("Discord telemetry server opening soon!");
+            }}
+          >
+            Discord Paddock
+          </a>
         </div>
       </div>
     </footer>
-  )
+  );
 }
 
-export default Footer
+export default Footer;
