@@ -16,8 +16,8 @@
   position: absolute;
   inset: 0;
   background-image: 
-    linear-gradient(rgba(239, 73, 56, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(239, 73, 56, 0.035) 1px, transparent 1px);
+    linear-gradient(rgba(249, 115, 22, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(249, 115, 22, 0.035) 1px, transparent 1px);
   background-size: 60px 60px;
   pointer-events: none;
 }
@@ -40,7 +40,7 @@
   font: 800 clamp(44px, 5.5vw, 72px)/0.9 var(--font-display);
   letter-spacing: -0.02em;
   text-transform: uppercase;
-  color: #fff;
+  color: var(--text-primary);
   margin: 0 0 16px;
 }
 
@@ -89,15 +89,15 @@
   aspect-ratio: 4 / 5;
   border-radius: 22px;
   overflow: hidden;
-  background: #141312;
+  background: var(--surface);
   border: 1px solid var(--line);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .member-card:hover .member-image-box {
   border-color: var(--red);
-  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.7), 0 0 20px rgba(239, 73, 56, 0.2);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35), 0 0 20px rgba(249, 115, 22, 0.2);
 }
 
 .member-image {
@@ -123,9 +123,9 @@
   z-index: 2;
   /* Dual Halftone Dot Matrix Texture */
   background-image: 
-    radial-gradient(circle at center, #ef4938 1.4px, transparent 1.6px),
+    radial-gradient(circle at center, #f97316 1.4px, transparent 1.6px),
     radial-gradient(circle at center, #000000 1.2px, transparent 1.4px),
-    repeating-linear-gradient(0deg, rgba(239, 73, 56, 0.1) 0px, rgba(239, 73, 56, 0.1) 1px, transparent 1px, transparent 3px);
+    repeating-linear-gradient(0deg, rgba(249, 115, 22, 0.1) 0px, rgba(249, 115, 22, 0.1) 1px, transparent 1px, transparent 3px);
   background-size: 5px 5px, 5px 5px, 100% 3px;
   background-position: 0 0, 2.5px 2.5px, 0 0;
   mix-blend-mode: screen;
@@ -137,7 +137,7 @@
   border-radius: 22px;
   pointer-events: none;
   opacity: 0;
-  background: linear-gradient(180deg, transparent 0%, rgba(239, 73, 56, 0.22) 50%, transparent 100%);
+  background: linear-gradient(180deg, transparent 0%, rgba(249, 115, 22, 0.22) 50%, transparent 100%);
   height: 35%;
   z-index: 3;
   transition: opacity 0.2s ease;
@@ -172,11 +172,11 @@
   top: 0;
   width: 360px;
   max-width: 88vw;
-  background: rgba(16, 15, 14, 0.97);
+  background: var(--surface);
   backdrop-filter: blur(18px);
   border: 1.5px solid var(--red);
   border-radius: 18px;
-  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.95), 0 0 35px rgba(239, 73, 56, 0.35);
+  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.4), 0 0 35px rgba(249, 115, 22, 0.2);
   z-index: 999;
   padding: 22px 20px;
   display: flex;
@@ -220,7 +220,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  border-bottom: 1px solid rgba(239, 73, 56, 0.25);
+  border-bottom: 1px solid rgba(249, 115, 22, 0.25);
   padding-bottom: 12px;
 }
 
@@ -228,7 +228,7 @@
   font: 800 24px/1 var(--font-display);
   letter-spacing: -0.01em;
   text-transform: uppercase;
-  color: #fff;
+  color: var(--text-primary);
   margin: 0 0 4px;
 }
 
@@ -248,18 +248,18 @@
 }
 
 .window-callsign {
-  color: #ff9d92;
+  color: var(--red);
   font: 700 11px var(--font-mono);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  background: rgba(239, 73, 56, 0.2);
-  border: 1px solid rgba(239, 73, 56, 0.4);
+  background: rgba(249, 115, 22, 0.12);
+  border: 1px solid rgba(249, 115, 22, 0.4);
   padding: 2px 7px;
   border-radius: 3px;
 }
 
 .window-dept {
-  color: #888;
+  color: var(--muted);
   font: 400 10.5px var(--font-mono);
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -273,7 +273,7 @@
 }
 
 .window-bio {
-  color: #e4e0da;
+  color: var(--text-secondary);
   font: 400 12.5px/1.6 var(--font-mono);
   margin: 0;
 }
@@ -285,9 +285,9 @@
 }
 
 .window-skill-pill {
-  background: #232120;
-  border: 1px solid #383533;
-  color: #ff9d92;
+  background: var(--bg);
+  border: 1px solid var(--line-strong);
+  color: var(--red);
   font: 500 10px var(--font-mono);
   letter-spacing: 0.04em;
   padding: 3px 7px;
@@ -297,7 +297,7 @@
 
 /* Contacts within the hover window */
 .window-contacts {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--line);
   padding-top: 12px;
   display: flex;
   flex-direction: column;
@@ -308,7 +308,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #ccc;
+  color: var(--text-secondary);
   font: 400 11.5px var(--font-mono);
   text-decoration: none;
   transition: color 0.2s;
@@ -336,9 +336,9 @@
   justify-content: center;
   gap: 6px;
   padding: 7px 10px;
-  background: #201e1d;
+  background: var(--bg);
   border: 1px solid var(--line-strong);
-  color: #fff;
+  color: var(--text-primary);
   font: 600 10.5px var(--font-mono);
   letter-spacing: 0.05em;
   text-decoration: none;
@@ -351,7 +351,7 @@
   background: var(--red);
   border-color: var(--red);
   color: #fff;
-  box-shadow: 0 3px 12px rgba(239, 73, 56, 0.45);
+  box-shadow: 0 3px 12px rgba(249, 115, 22, 0.45);
 }
 
 /* ---------------------------------------------------------
@@ -364,7 +364,7 @@
 .member-title {
   font: 700 24px/1.2 var(--font-display);
   letter-spacing: 0.01em;
-  color: #fff;
+  color: var(--text-primary);
   margin: 0 0 4px;
   transition: color 0.2s;
 }
@@ -384,7 +384,7 @@
 .team-join-banner {
   max-width: 1280px;
   margin: 75px auto 0;
-  background: #151413;
+  background: var(--surface);
   border: 1px solid var(--line-strong);
   border-radius: 16px;
   padding: 38px 45px;
@@ -410,7 +410,7 @@
   font: 800 32px/1 var(--font-display);
   letter-spacing: -0.01em;
   text-transform: uppercase;
-  color: #fff;
+  color: var(--text-primary);
   margin: 0 0 8px;
 }
 
@@ -434,13 +434,13 @@
   white-space: nowrap;
   border-radius: 4px;
   transition: all 0.2s;
-  box-shadow: 0 4px 16px rgba(239, 73, 56, 0.3);
+  box-shadow: 0 4px 16px rgba(249, 115, 22, 0.3);
 }
 
 .join-btn:hover {
   background: var(--red-hover);
   transform: translateY(-2px);
-  box-shadow: 0 6px 22px rgba(239, 73, 56, 0.5);
+  box-shadow: 0 6px 22px rgba(249, 115, 22, 0.5);
 }
 
 /* ---------------------------------------------------------

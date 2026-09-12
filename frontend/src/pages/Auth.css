@@ -167,7 +167,7 @@
 .form-group input:focus,
 .input-wrapper input:focus {
   border-color: var(--red);
-  box-shadow: 0 0 0 1px var(--red), 0 0 12px rgba(239, 73, 56, 0.2);
+  box-shadow: 0 0 0 1px var(--red), 0 0 12px rgba(249, 115, 22, 0.2);
 }
 
 .toggle-password {

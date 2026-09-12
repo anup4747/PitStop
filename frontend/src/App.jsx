@@ -10,6 +10,23 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Team from './pages/Team'
 
+// ── Theme hook ─────────────────────────────────────────────
+function useTheme() {
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('pitstop-theme') || 'light'
+  })
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme)
+    localStorage.setItem('pitstop-theme', theme)
+  }, [theme])
+
+  const toggleTheme = () =>
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'))
+
+  return { theme, toggleTheme }
+}
+
 // Helper component to scroll to top on route change or jump to hash if present
 function ScrollToTop() {
   const { pathname, hash } = useLocation()
@@ -31,6 +48,7 @@ function ScrollToTop() {
 function AppShell() {
   const [search, setSearch] = useState('')
   const [cartCount, setCartCount] = useState(0)
+  const { theme, toggleTheme } = useTheme()
 
   const handleAddToCart = () => {
     setCartCount((count) => count + 1)
@@ -48,6 +66,8 @@ function AppShell() {
         setSearch={setSearch}
         cartCount={cartCount}
         onCartClick={handleCartClick}
+        theme={theme}
+        onToggleTheme={toggleTheme}
       />
       <Routes>
         <Route
@@ -74,7 +94,7 @@ function AppShell() {
           }
         />
       </Routes>
-      <Footer />
+      <Footer theme={theme} />
     </div>
   )
 }

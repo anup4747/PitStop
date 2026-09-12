@@ -1,5 +1,6 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import navLogo from '../assets/logo.png'
+import logoDark from '../assets/logo.png'
+import logoLight from '../assets/logoLight.png'
 
 const icon = (name) => {
   const paths = {
@@ -26,7 +27,7 @@ const icon = (name) => {
   )
 }
 
-function Footer() {
+function Footer({ theme }) {
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -45,7 +46,11 @@ function Footer() {
     <footer id="journal">
       <div className="footer-brand">
         <Link to="/" className="footer-brand-link" aria-label="Pitstop Solutions home">
-          <img src={navLogo} alt="Pitstop Solutions" className="footer-logo-img" />
+          <img
+            src={theme === 'light' ? logoLight : logoDark}
+            alt="Pitstop Solutions"
+            className="footer-logo-img"
+          />
         </Link>
         <h2>
           Keep your

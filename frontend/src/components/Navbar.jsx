@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import navLogo from '../assets/navLogo.png'
+import navLogoDark from '../assets/navLogo.png'
+import navLogoLight from '../assets/navLogolight.png'
 
 const icon = (name) => {
   const paths = {
@@ -33,6 +34,17 @@ const icon = (name) => {
         <circle cx="12" cy="7" r="4" />
       </>
     ),
+    sun: (
+      <>
+        <circle cx="12" cy="12" r="4" />
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+      </>
+    ),
+    moon: (
+      <>
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+      </>
+    ),
   }
   return (
     <svg
@@ -50,7 +62,7 @@ const icon = (name) => {
   )
 }
 
-function Navbar({ search, setSearch, cartCount, onCartClick }) {
+function Navbar({ search, setSearch, cartCount, onCartClick, theme, onToggleTheme }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
@@ -84,7 +96,11 @@ function Navbar({ search, setSearch, cartCount, onCartClick }) {
       {/* Header */}
       <header className="site-header">
         <Link className="brand" to="/" aria-label="Pitstop Solutions home" onClick={() => setMenuOpen(false)}>
-          <img src={navLogo} alt="Pitstop Solutions" className="nav-logo-img" />
+          <img
+            src={theme === 'light' ? navLogoLight : navLogoDark}
+            alt="Pitstop Solutions"
+            className="nav-logo-img"
+          />
         </Link>
 
         <nav className={menuOpen ? 'main-nav open' : 'main-nav'}>
@@ -130,6 +146,17 @@ function Navbar({ search, setSearch, cartCount, onCartClick }) {
             {icon('user')}
             <span className="auth-btn-text">LOGIN</span>
           </Link>
+
+          {/* Dark / Light Mode Toggle */}
+          <button
+            className="theme-toggle"
+            type="button"
+            onClick={onToggleTheme}
+            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+          >
+            {theme === 'dark' ? icon('sun') : icon('moon')}
+          </button>
 
           <button
             className="cart-button"
