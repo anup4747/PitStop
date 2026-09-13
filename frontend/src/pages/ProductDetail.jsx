@@ -1,7 +1,7 @@
-import { useState, useMemo } from 'react'
-import { useParams, Link, useNavigate } from 'react-router-dom'
-import { getProductById, getRelatedProducts } from '../data/products'
-import './ProductDetail.css'
+import { useState, useMemo } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { getProductById, getRelatedProducts } from "../data/products";
+import "./ProductDetail.css";
 
 const icon = (name) => {
   const paths = {
@@ -42,8 +42,8 @@ const icon = (name) => {
     ),
     wrench: (
       <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
-    )
-  }
+    ),
+  };
   return (
     <svg
       className="icon"
@@ -57,78 +57,92 @@ const icon = (name) => {
     >
       {paths[name]}
     </svg>
-  )
-}
+  );
+};
 
 function ProductDetail({ onAddToCart }) {
-  const { id } = useParams()
-  const navigate = useNavigate()
-  const product = useMemo(() => getProductById(id), [id])
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const product = useMemo(() => getProductById(id), [id]);
 
-  const [activeImageIndex, setActiveImageIndex] = useState(0)
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(() => {
-    return product?.options?.values?.[0] || null
-  })
-  const [quantity, setQuantity] = useState(1)
-  const [isAdded, setIsAdded] = useState(false)
-  const [activeTab, setActiveTab] = useState('specs') // 'specs' | 'compat' | 'maintenance'
+    return product?.options?.values?.[0] || null;
+  });
+  const [quantity, setQuantity] = useState(1);
+  const [isAdded, setIsAdded] = useState(false);
+  const [activeTab, setActiveTab] = useState("specs"); // 'specs' | 'compat' | 'maintenance'
 
   // Sync option when product changes
   useMemo(() => {
     if (product?.options?.values?.length) {
-      setSelectedOption(product.options.values[0])
+      setSelectedOption(product.options.values[0]);
     }
-    setActiveImageIndex(0)
-    setQuantity(1)
-  }, [product])
+    setActiveImageIndex(0);
+    setQuantity(1);
+  }, [product]);
 
   const relatedProducts = useMemo(() => {
-    if (!product) return []
-    return getRelatedProducts(product.id, product.category, 4)
-  }, [product])
+    if (!product) return [];
+    return getRelatedProducts(product.id, product.category, 4);
+  }, [product]);
 
   if (!product) {
     return (
       <div className="product-detail-page">
-        <div style={{ padding: '80px 6vw', textAlign: 'center' }}>
-          <h1 style={{ font: '800 48px var(--font-display)', textTransform: 'uppercase' }}>
+        <div style={{ padding: "80px 6vw", textAlign: "center" }}>
+          <h1
+            style={{
+              font: "800 48px var(--font-display)",
+              textTransform: "uppercase",
+            }}
+          >
             Part Not Found In Paddock
           </h1>
-          <p style={{ color: 'var(--muted)', fontFamily: 'var(--font-mono)', marginBottom: 24 }}>
-            The requested race component does not exist in our telemetry catalog.
+          <p
+            style={{
+              color: "var(--muted)",
+              fontFamily: "var(--font-mono)",
+              marginBottom: 24,
+            }}
+          >
+            The requested race component does not exist in our telemetry
+            catalog.
           </p>
           <button
             type="button"
             className="button button-red"
-            onClick={() => navigate('/shop')}
+            onClick={() => navigate("/shop")}
           >
             Return to Parts Paddock
           </button>
         </div>
       </div>
-    )
+    );
   }
 
   const handleAddToCart = () => {
     if (onAddToCart) {
       for (let i = 0; i < quantity; i++) {
-        onAddToCart()
+        onAddToCart();
       }
     }
-    setIsAdded(true)
-    setTimeout(() => setIsAdded(false), 1500)
-  }
+    setIsAdded(true);
+    setTimeout(() => setIsAdded(false), 1500);
+  };
 
   const handleQtyChange = (delta) => {
-    setQuantity((prev) => Math.max(1, Math.min(prev + delta, product.stockCount || 10)))
-  }
+    setQuantity((prev) =>
+      Math.max(1, Math.min(prev + delta, product.stockCount || 10)),
+    );
+  };
 
   return (
     <div className="product-detail-page">
       {/* ── Sub Navigation & Breadcrumbs ── */}
       <nav className="pd-nav-bar" aria-label="Product navigation">
         <Link to="/shop" className="pd-back-link">
-          {icon('arrowLeft')} Back to Paddock Catalog
+          {icon("arrowLeft")} Back to Paddock Catalog
         </Link>
 
         <div className="pd-breadcrumbs">
@@ -156,12 +170,15 @@ function ProductDetail({ onAddToCart }) {
           </div>
 
           {product.images && product.images.length > 1 && (
-            <div className="pd-thumbs-strip" aria-label="Component gallery thumbnails">
+            <div
+              className="pd-thumbs-strip"
+              aria-label="Component gallery thumbnails"
+            >
               {product.images.map((img, idx) => (
                 <button
                   key={idx}
                   type="button"
-                  className={`pd-thumb-btn ${activeImageIndex === idx ? 'active' : ''}`}
+                  className={`pd-thumb-btn ${activeImageIndex === idx ? "active" : ""}`}
                   onClick={() => setActiveImageIndex(idx)}
                   aria-label={`View component image ${idx + 1}`}
                 >
@@ -170,30 +187,6 @@ function ProductDetail({ onAddToCart }) {
               ))}
             </div>
           )}
-
-          <div className="pd-trust-row">
-            <div className="pd-trust-badge">
-              {icon('shield')}
-              <div className="pd-trust-text">
-                <strong>SAE / FIA</strong>
-                <span>Rulebook Ready</span>
-              </div>
-            </div>
-            <div className="pd-trust-badge">
-              {icon('zap')}
-              <div className="pd-trust-text">
-                <strong>100% Dyno</strong>
-                <span>Track Inspected</span>
-              </div>
-            </div>
-            <div className="pd-trust-badge">
-              {icon('truck')}
-              <div className="pd-trust-text">
-                <strong>Express Dispatch</strong>
-                <span>Same-Day Paddock</span>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Right Column: Information & Actions */}
@@ -209,7 +202,9 @@ function ProductDetail({ onAddToCart }) {
             <div className="pd-current-price">${product.price}</div>
             {product.originalPrice && (
               <>
-                <div className="pd-original-price">${product.originalPrice}</div>
+                <div className="pd-original-price">
+                  ${product.originalPrice}
+                </div>
                 <div className="pd-save-badge">
                   Save ${product.originalPrice - product.price}
                 </div>
@@ -228,7 +223,7 @@ function ProductDetail({ onAddToCart }) {
             <ul className="pd-feature-list">
               {product.features.map((feat, idx) => (
                 <li className="pd-feature-item" key={idx}>
-                  {icon('check')}
+                  {icon("check")}
                   <span>{feat}</span>
                 </li>
               ))}
@@ -248,7 +243,7 @@ function ProductDetail({ onAddToCart }) {
                     type="button"
                     role="radio"
                     aria-checked={selectedOption === val}
-                    className={`pd-opt-btn ${selectedOption === val ? 'active' : ''}`}
+                    className={`pd-opt-btn ${selectedOption === val ? "active" : ""}`}
                     onClick={() => setSelectedOption(val)}
                   >
                     {val}
@@ -282,16 +277,15 @@ function ProductDetail({ onAddToCart }) {
 
             <button
               type="button"
-              className={`pd-add-cart-btn ${isAdded ? 'added' : ''}`}
+              className={`pd-add-cart-btn ${isAdded ? "added" : ""}`}
               onClick={handleAddToCart}
             >
               {isAdded ? (
-                <>
-                  {icon('check')} Added to Garage Cart!
-                </>
+                <>{icon("check")} Added to Garage Cart!</>
               ) : (
                 <>
-                  {icon('cart')} Add To Garage Cart (${product.price * quantity})
+                  {icon("cart")} Add To Garage Cart (${product.price * quantity}
+                  )
                 </>
               )}
             </button>
@@ -300,12 +294,16 @@ function ProductDetail({ onAddToCart }) {
           {/* Paddock perks */}
           <div className="pd-perks-list">
             <div className="pd-perk-item">
-              {icon('wrench')}
-              <span>Includes trackside mounting hardware and technical drawings</span>
+              {icon("wrench")}
+              <span>
+                Includes trackside mounting hardware and technical drawings
+              </span>
             </div>
             <div className="pd-perk-item">
-              {icon('shield')}
-              <span>Backed by Pitstop Solutions 30-day competition defect warranty</span>
+              {icon("shield")}
+              <span>
+                Backed by Pitstop Solutions 30-day competition defect warranty
+              </span>
             </div>
           </div>
         </div>
@@ -317,34 +315,34 @@ function ProductDetail({ onAddToCart }) {
           <button
             type="button"
             role="tab"
-            aria-selected={activeTab === 'specs'}
-            className={`pd-tab-trigger ${activeTab === 'specs' ? 'active' : ''}`}
-            onClick={() => setActiveTab('specs')}
+            aria-selected={activeTab === "specs"}
+            className={`pd-tab-trigger ${activeTab === "specs" ? "active" : ""}`}
+            onClick={() => setActiveTab("specs")}
           >
             Technical Specifications
           </button>
           <button
             type="button"
             role="tab"
-            aria-selected={activeTab === 'compat'}
-            className={`pd-tab-trigger ${activeTab === 'compat' ? 'active' : ''}`}
-            onClick={() => setActiveTab('compat')}
+            aria-selected={activeTab === "compat"}
+            className={`pd-tab-trigger ${activeTab === "compat" ? "active" : ""}`}
+            onClick={() => setActiveTab("compat")}
           >
             Vehicle & Rulebook Compatibility
           </button>
           <button
             type="button"
             role="tab"
-            aria-selected={activeTab === 'maintenance'}
-            className={`pd-tab-trigger ${activeTab === 'maintenance' ? 'active' : ''}`}
-            onClick={() => setActiveTab('maintenance')}
+            aria-selected={activeTab === "maintenance"}
+            className={`pd-tab-trigger ${activeTab === "maintenance" ? "active" : ""}`}
+            onClick={() => setActiveTab("maintenance")}
           >
             Pit Maintenance Guide
           </button>
         </div>
 
         <div className="pd-tab-content">
-          {activeTab === 'specs' && (
+          {activeTab === "specs" && (
             <table className="pd-specs-table">
               <tbody>
                 {Object.entries(product.specs || {}).map(([key, value]) => (
@@ -357,39 +355,43 @@ function ProductDetail({ onAddToCart }) {
             </table>
           )}
 
-          {activeTab === 'compat' && (
+          {activeTab === "compat" && (
             <div className="pd-compat-box">
               <h4>Competition & Rulebook Compliance</h4>
               <p>
-                This component is engineered to comply with the technical regulations of collegiate
-                and amateur off-road racing series:
+                This component is engineered to comply with the technical
+                regulations of collegiate and amateur off-road racing series:
               </p>
               <div className="pd-compat-pill">
                 Verified Compatible: {product.compatible}
               </div>
               <p>
-                All weldments, structural tubing dimensions, and material properties meet or exceed
-                SAE BAJA technical inspection specifications. Formal Mill Test Reports (MTR) and
-                FEA structural load documentation are available upon team request.
+                All weldments, structural tubing dimensions, and material
+                properties meet or exceed SAE BAJA technical inspection
+                specifications. Formal Mill Test Reports (MTR) and FEA
+                structural load documentation are available upon team request.
               </p>
             </div>
           )}
 
-          {activeTab === 'maintenance' && (
+          {activeTab === "maintenance" && (
             <div className="pd-maintenance-box">
               <h4>Paddock Trackside Maintenance Recommendations</h4>
               <p>
-                <strong>Pre-Race Scrutineering:</strong> Check all fasteners with a calibrated torque
-                wrench before each heat. Verify zero slop in spherical joints and bearing journals.
+                <strong>Pre-Race Scrutineering:</strong> Check all fasteners
+                with a calibrated torque wrench before each heat. Verify zero
+                slop in spherical joints and bearing journals.
               </p>
               <p>
-                <strong>Post-Heat Inspection:</strong> High-pressure water wash to remove abrasive mud
-                slurry. Inspect surface coatings for rock chips and re-apply anti-corrosion spray to
-                exposed chromoly and steel components.
+                <strong>Post-Heat Inspection:</strong> High-pressure water wash
+                to remove abrasive mud slurry. Inspect surface coatings for rock
+                chips and re-apply anti-corrosion spray to exposed chromoly and
+                steel components.
               </p>
               <p>
-                <strong>Replacement Intervals:</strong> Replace consumable wear items (belts, seals,
-                brake pads) following 15 hours of severe competitive track exposure.
+                <strong>Replacement Intervals:</strong> Replace consumable wear
+                items (belts, seals, brake pads) following 15 hours of severe
+                competitive track exposure.
               </p>
             </div>
           )}
@@ -407,7 +409,7 @@ function ProductDetail({ onAddToCart }) {
               <h2>Frequently Paired Components</h2>
             </div>
             <Link to="/shop" className="text-link">
-              View Entire Catalog {icon('arrowRight')}
+              View Entire Catalog {icon("arrowRight")}
             </Link>
           </div>
 
@@ -431,8 +433,11 @@ function ProductDetail({ onAddToCart }) {
                     <div className="shop-card-price-box">
                       <span className="shop-card-price">${rel.price}</span>
                     </div>
-                    <Link to={`/product/${rel.id}`} className="shop-card-action-link">
-                      Inspect {icon('arrowRight')}
+                    <Link
+                      to={`/product/${rel.id}`}
+                      className="shop-card-action-link"
+                    >
+                      Inspect {icon("arrowRight")}
                     </Link>
                   </div>
                 </div>
@@ -442,7 +447,7 @@ function ProductDetail({ onAddToCart }) {
         </section>
       )}
     </div>
-  )
+  );
 }
 
-export default ProductDetail
+export default ProductDetail;

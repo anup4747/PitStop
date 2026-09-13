@@ -1,7 +1,7 @@
-import { useState } from 'react'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
-import navLogoDark from '../assets/navLogo.png'
-import navLogoLight from '../assets/navLogolight.png'
+import { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import navLogoDark from "../assets/navLogo.png";
+import navLogoLight from "../assets/navLogolight.png";
 
 const icon = (name) => {
   const paths = {
@@ -45,7 +45,7 @@ const icon = (name) => {
         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
       </>
     ),
-  }
+  };
   return (
     <svg
       className="icon"
@@ -59,80 +59,117 @@ const icon = (name) => {
     >
       {paths[name]}
     </svg>
-  )
-}
+  );
+};
 
-function Navbar({ search, setSearch, cartCount, onCartClick, theme, onToggleTheme }) {
-  const [menuOpen, setMenuOpen] = useState(false)
-  const navigate = useNavigate()
-  const location = useLocation()
+function Navbar({
+  search,
+  setSearch,
+  cartCount,
+  onCartClick,
+  theme,
+  onToggleTheme,
+}) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleNavClick = (hash) => {
-    setMenuOpen(false)
-    if (location.pathname !== '/') {
-      navigate('/' + hash)
+    setMenuOpen(false);
+    if (location.pathname !== "/") {
+      navigate("/" + hash);
     } else {
-      const element = document.querySelector(hash)
+      const element = document.querySelector(hash);
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth' })
+        element.scrollIntoView({ behavior: "smooth" });
       }
     }
-  }
+  };
 
   const handleSearchChange = (e) => {
-    setSearch(e.target.value)
-    if (location.pathname !== '/shop') {
-      navigate('/shop')
+    setSearch(e.target.value);
+    if (location.pathname !== "/shop") {
+      navigate("/shop");
     }
-  }
+  };
 
-  const isShopActive = location.pathname === '/shop' || location.pathname.startsWith('/product/')
-  const isTeamActive = location.pathname === '/team'
+  const isShopActive =
+    location.pathname === "/shop" || location.pathname.startsWith("/product/");
+  const isTeamActive = location.pathname === "/team";
 
   return (
     <>
       {/* Announcement Bar */}
       <div className="announcement">
-        Free shipping on orders over $150 <span>•</span> Built for the racing line
+        Free shipping on orders over $150 <span>•</span> Built for the racing
+        line
       </div>
 
       {/* Header */}
       <header className="site-header">
-        <Link className="brand" to="/" aria-label="Pitstop Solutions home" onClick={() => setMenuOpen(false)}>
+        <Link
+          className="brand"
+          to="/"
+          aria-label="Pitstop Solutions home"
+          onClick={() => setMenuOpen(false)}
+        >
           <img
-            src={theme === 'light' ? navLogoLight : navLogoDark}
+            src={theme === "light" ? navLogoLight : navLogoDark}
             alt="Pitstop Solutions"
             className="nav-logo-img"
           />
         </Link>
 
-        <nav className={menuOpen ? 'main-nav open' : 'main-nav'}>
+        <nav
+          id="mobile-navigation"
+          className={menuOpen ? "main-nav open" : "main-nav"}
+        >
           <Link
             to="/shop"
-            className={isShopActive ? 'active' : ''}
+            className={isShopActive ? "active" : ""}
             onClick={() => setMenuOpen(false)}
           >
             Shop parts
           </Link>
-          <a href="#why-us" onClick={(e) => { e.preventDefault(); handleNavClick('#why-us'); }}>
+          <a
+            href="#why-us"
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavClick("#why-us");
+            }}
+          >
             Why Pitstop
           </a>
-          <a href="#journal" onClick={(e) => { e.preventDefault(); handleNavClick('#journal'); }}>
+          <a
+            href="#journal"
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavClick("#journal");
+            }}
+          >
             Racing journal
           </a>
           <Link
             to="/team"
-            className={isTeamActive ? 'active' : ''}
+            className={isTeamActive ? "active" : ""}
             onClick={() => setMenuOpen(false)}
           >
             Team Crew
           </Link>
 
           <div className="nav-mobile-auth">
-            <Link to="/login" onClick={() => setMenuOpen(false)} className="mobile-auth-btn">
+            <Link
+              to="/login"
+              onClick={() => setMenuOpen(false)}
+              className="mobile-auth-btn"
+            >
               Driver Login
             </Link>
-            <Link to="/signup" onClick={() => setMenuOpen(false)} className="mobile-auth-btn primary">
+            <Link
+              to="/signup"
+              onClick={() => setMenuOpen(false)}
+              className="mobile-auth-btn primary"
+            >
               Join Grid
             </Link>
           </div>
@@ -140,7 +177,7 @@ function Navbar({ search, setSearch, cartCount, onCartClick, theme, onToggleThem
 
         <div className="header-actions">
           <label className="search-box">
-            {icon('search')}
+            {icon("search")}
             <input
               value={search}
               onChange={handleSearchChange}
@@ -151,10 +188,10 @@ function Navbar({ search, setSearch, cartCount, onCartClick, theme, onToggleThem
 
           <Link
             to="/login"
-            className={`auth-header-btn ${location.pathname === '/login' || location.pathname === '/signup' ? 'active' : ''}`}
+            className={`auth-header-btn ${location.pathname === "/login" || location.pathname === "/signup" ? "active" : ""}`}
             title="Driver Paddock Login"
           >
-            {icon('user')}
+            {icon("user")}
             <span className="auth-btn-text">LOGIN</span>
           </Link>
 
@@ -163,10 +200,10 @@ function Navbar({ search, setSearch, cartCount, onCartClick, theme, onToggleThem
             className="theme-toggle"
             type="button"
             onClick={onToggleTheme}
-            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-            title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+            title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
           >
-            {theme === 'dark' ? icon('sun') : icon('moon')}
+            {theme === "dark" ? icon("sun") : icon("moon")}
           </button>
 
           <button
@@ -175,7 +212,7 @@ function Navbar({ search, setSearch, cartCount, onCartClick, theme, onToggleThem
             onClick={onCartClick}
             aria-label={`Cart with ${cartCount} items`}
           >
-            {icon('cart')}
+            {icon("cart")}
             <span>{cartCount}</span>
           </button>
 
@@ -184,13 +221,15 @@ function Navbar({ search, setSearch, cartCount, onCartClick, theme, onToggleThem
             type="button"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle menu"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
           >
-            {menuOpen ? icon('close') : icon('menu')}
+            {menuOpen ? icon("close") : icon("menu")}
           </button>
         </div>
       </header>
     </>
-  )
+  );
 }
 
-export default Navbar
+export default Navbar;
