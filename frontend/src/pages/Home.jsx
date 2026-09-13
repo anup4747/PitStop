@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import heroKartImg from '../assets/cart23.jpg'
 
 const categories = ['All parts', 'Engine', 'Brakes', 'Chassis', 'Safety']
@@ -105,9 +106,9 @@ function Home({ search, setSearch, onAddToCart }) {
             Proven on track. Shipped to your garage.
           </p>
           <div className="hero-buttons">
-            <a className="button button-red" href="#shop">
+            <Link className="button button-red" to="/shop">
               Shop the collection {icon('arrow')}
-            </a>
+            </Link>
             <a className="play-link" href="#journal">
               <span>{icon('play')}</span> Watch the pitstop
             </a>
@@ -169,13 +170,12 @@ function Home({ search, setSearch, onAddToCart }) {
             <p className="eyebrow"><span></span> The parts department</p>
             <h2>Make your kart<br /><em>mean business.</em></h2>
           </div>
-          <button
+          <Link
             className="text-link"
-            type="button"
-            onClick={() => { setActiveCategory('All parts'); setSearch(''); }}
+            to="/shop"
           >
             View all parts {icon('arrow')}
-          </button>
+          </Link>
         </div>
 
         <div className="category-tabs" role="tablist">

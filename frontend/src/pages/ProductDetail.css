@@ -1,0 +1,622 @@
+/* =========================================================
+   PITSTOP MOTORSPORT PRODUCT DETAIL STYLES
+   ========================================================= */
+
+.product-detail-page {
+  padding-bottom: 100px;
+  background: var(--bg);
+  min-height: 100vh;
+}
+
+/* ── Top Navigation Bar ── */
+.pd-nav-bar {
+  padding: 24px 6vw 18px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.pd-back-link {
+  color: var(--text-primary);
+  text-decoration: none;
+  font: 600 13px var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.2s, transform 0.2s;
+}
+
+.pd-back-link:hover {
+  color: var(--red);
+  transform: translateX(-4px);
+}
+
+.pd-back-link .icon {
+  width: 16px;
+  height: 16px;
+}
+
+.pd-breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 500 12px var(--font-mono);
+  color: var(--muted);
+  text-transform: uppercase;
+  flex-wrap: wrap;
+}
+
+.pd-breadcrumbs a {
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.pd-breadcrumbs a:hover {
+  color: var(--red);
+}
+
+.pd-breadcrumbs span.sep {
+  color: var(--line-strong);
+}
+
+.pd-breadcrumbs span.current {
+  color: var(--red);
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Main Detail Layout ── */
+.pd-layout {
+  padding: 40px 6vw 60px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+  align-items: start;
+}
+
+/* ── Left Column: Media Gallery ── */
+.pd-gallery {
+  position: sticky;
+  top: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.pd-main-image-box {
+  position: relative;
+  width: 100%;
+  height: 480px;
+  background: #151413;
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.pd-main-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: contrast(1.08) brightness(0.96);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pd-main-image-box:hover .pd-main-image {
+  transform: scale(1.04);
+}
+
+.pd-badge-pill {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  background: var(--red);
+  color: #fff;
+  font: 700 11px var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 5px 12px;
+  z-index: 2;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.pd-thumbs-strip {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.pd-thumb-btn {
+  width: 90px;
+  height: 75px;
+  border: 2px solid var(--line);
+  background: #171615;
+  padding: 0;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
+  flex-shrink: 0;
+}
+
+.pd-thumb-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pd-thumb-btn:hover {
+  border-color: var(--line-strong);
+}
+
+.pd-thumb-btn.active {
+  border-color: var(--red);
+  transform: translateY(-2px);
+}
+
+/* Compliance Badges under Gallery */
+.pd-trust-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.pd-trust-badge {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pd-trust-badge .icon {
+  width: 20px;
+  height: 20px;
+  color: var(--red);
+  flex-shrink: 0;
+}
+
+.pd-trust-text strong {
+  display: block;
+  font: 700 11.5px var(--font-mono);
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.pd-trust-text span {
+  font: 400 10.5px var(--font-mono);
+  color: var(--muted);
+}
+
+/* ── Right Column: Specs & Purchase ── */
+.pd-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.pd-header-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.pd-category-tag {
+  color: var(--red);
+  font: 700 12px var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.pd-sku-tag {
+  color: var(--muted);
+  font: 500 11px var(--font-mono);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: 2px 8px;
+  border-radius: 2px;
+}
+
+.pd-title {
+  font: 800 clamp(36px, 4.2vw, 52px)/0.95 var(--font-display);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin: 0 0 16px;
+}
+
+.pd-price-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 24px;
+}
+
+.pd-current-price {
+  font: 800 38px/1 var(--font-display);
+  color: var(--text-primary);
+}
+
+.pd-original-price {
+  font: 500 18px var(--font-mono);
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.pd-save-badge {
+  background: rgba(249, 115, 22, 0.15);
+  color: var(--red);
+  border: 1px solid var(--red);
+  font: 700 11px var(--font-mono);
+  padding: 4px 8px;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+
+.pd-stock-status {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font: 600 12px var(--font-mono);
+  color: #22c55e;
+}
+
+.pd-stock-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 8px #22c55e;
+}
+
+.pd-overview {
+  color: var(--text-secondary);
+  font: 400 15px/1.6 var(--font-mono);
+  margin-bottom: 24px;
+}
+
+/* Key Points Bullet List */
+.pd-feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pd-feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: var(--text-secondary);
+  font: 400 13.5px/1.4 var(--font-mono);
+}
+
+.pd-feature-item .icon {
+  width: 16px;
+  height: 16px;
+  color: var(--red);
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+/* Variant Selector */
+.pd-options-box {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: 18px 20px;
+  margin-bottom: 24px;
+  border-radius: 2px;
+}
+
+.pd-options-label {
+  display: block;
+  font: 700 12px var(--font-mono);
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.pd-options-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pd-opt-btn {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: var(--text-secondary);
+  font: 600 12.5px var(--font-mono);
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 2px;
+}
+
+.pd-opt-btn:hover {
+  border-color: var(--line-strong);
+  color: var(--text-primary);
+}
+
+.pd-opt-btn.active {
+  border-color: var(--red);
+  color: var(--red);
+  background: rgba(249, 115, 22, 0.08);
+}
+
+/* Purchase Controls */
+.pd-action-box {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.pd-qty-stepper {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 2px;
+}
+
+.pd-qty-btn {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font: 700 16px var(--font-mono);
+  width: 44px;
+  height: 48px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background 0.2s;
+}
+
+.pd-qty-btn:hover {
+  background: var(--line);
+}
+
+.pd-qty-value {
+  font: 700 15px var(--font-mono);
+  color: var(--text-primary);
+  width: 44px;
+  text-align: center;
+}
+
+.pd-add-cart-btn {
+  flex: 1;
+  min-width: 220px;
+  height: 48px;
+  background: var(--red);
+  color: #fff;
+  border: none;
+  font: 700 14px var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 16px rgba(249, 115, 22, 0.35);
+}
+
+.pd-add-cart-btn:hover {
+  background: var(--red-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(249, 115, 22, 0.5);
+}
+
+.pd-add-cart-btn.added {
+  background: #22c55e;
+  box-shadow: 0 4px 16px rgba(34, 197, 94, 0.4);
+}
+
+.pd-add-cart-btn .icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* Paddock Technical Guarantees */
+.pd-perks-list {
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pd-perk-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font: 500 12px var(--font-mono);
+  color: var(--muted);
+}
+
+.pd-perk-item .icon {
+  width: 14px;
+  height: 14px;
+  color: var(--red);
+}
+
+/* ── Technical Specifications Tabs ── */
+.pd-specs-section {
+  padding: 50px 6vw 40px;
+  border-top: 1px solid var(--line);
+}
+
+.pd-tabs-nav {
+  display: flex;
+  gap: 20px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 30px;
+  overflow-x: auto;
+}
+
+.pd-tab-trigger {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font: 700 15px var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0 0 14px;
+  cursor: pointer;
+  position: relative;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+
+.pd-tab-trigger:hover {
+  color: var(--text-primary);
+}
+
+.pd-tab-trigger.active {
+  color: var(--text-primary);
+  border-bottom: 2px solid var(--red);
+}
+
+.pd-tab-content {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: 32px 36px;
+  border-radius: 3px;
+}
+
+/* Specs Table */
+.pd-specs-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.pd-specs-table tr {
+  border-bottom: 1px solid var(--line);
+}
+
+.pd-specs-table tr:last-child {
+  border-bottom: none;
+}
+
+.pd-specs-table td {
+  padding: 14px 18px;
+  font: 400 14px var(--font-mono);
+}
+
+.pd-specs-table td.spec-name {
+  width: 32%;
+  color: var(--text-primary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-right: 1px solid var(--line);
+}
+
+.pd-specs-table td.spec-value {
+  color: var(--text-secondary);
+}
+
+.pd-compat-box,
+.pd-maintenance-box {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font: 400 14.5px/1.6 var(--font-mono);
+  color: var(--text-secondary);
+}
+
+.pd-compat-box h4,
+.pd-maintenance-box h4 {
+  font: 700 20px var(--font-display);
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.pd-compat-pill {
+  display: inline-block;
+  background: rgba(249, 115, 22, 0.1);
+  border: 1px solid var(--red);
+  color: var(--red);
+  font: 700 12px var(--font-mono);
+  padding: 6px 14px;
+  border-radius: 2px;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+
+/* ── Related Products Carousel / Grid ── */
+.pd-related-section {
+  padding: 50px 6vw 40px;
+  border-top: 1px solid var(--line);
+}
+
+.pd-related-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 30px;
+}
+
+.pd-related-header h2 {
+  font: 800 clamp(32px, 4vw, 44px) / 1 var(--font-display);
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin: 8px 0 0;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .pd-layout {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .pd-gallery {
+    position: static;
+  }
+  .pd-main-image-box {
+    height: 380px;
+  }
+  .pd-specs-table td.spec-name {
+    width: 45%;
+  }
+}
+
+@media (max-width: 600px) {
+  .pd-nav-bar {
+    padding: 16px 5vw;
+  }
+  .pd-layout {
+    padding: 24px 5vw 40px;
+  }
+  .pd-main-image-box {
+    height: 280px;
+  }
+  .pd-trust-row {
+    grid-template-columns: 1fr;
+  }
+  .pd-tab-content {
+    padding: 20px 16px;
+  }
+  .pd-specs-table td {
+    padding: 10px 12px;
+    font-size: 12.5px;
+  }
+}

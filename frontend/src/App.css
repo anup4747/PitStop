@@ -162,6 +162,13 @@ body {
   color: var(--text-primary);
 }
 
+.main-nav a.active {
+  color: var(--red);
+  font-weight: 600;
+  border-bottom: 2px solid var(--red);
+  padding-bottom: 4px;
+}
+
 .header-actions {
   display: flex;
   align-items: center;

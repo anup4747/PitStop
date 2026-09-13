@@ -81,10 +81,13 @@ function Navbar({ search, setSearch, cartCount, onCartClick, theme, onToggleThem
 
   const handleSearchChange = (e) => {
     setSearch(e.target.value)
-    if (location.pathname !== '/') {
-      navigate('/#shop')
+    if (location.pathname !== '/shop') {
+      navigate('/shop')
     }
   }
+
+  const isShopActive = location.pathname === '/shop' || location.pathname.startsWith('/product/')
+  const isTeamActive = location.pathname === '/team'
 
   return (
     <>
@@ -104,16 +107,24 @@ function Navbar({ search, setSearch, cartCount, onCartClick, theme, onToggleThem
         </Link>
 
         <nav className={menuOpen ? 'main-nav open' : 'main-nav'}>
-          <a href="#shop" onClick={(e) => { e.preventDefault(); handleNavClick('#shop'); }}>
+          <Link
+            to="/shop"
+            className={isShopActive ? 'active' : ''}
+            onClick={() => setMenuOpen(false)}
+          >
             Shop parts
-          </a>
+          </Link>
           <a href="#why-us" onClick={(e) => { e.preventDefault(); handleNavClick('#why-us'); }}>
             Why Pitstop
           </a>
           <a href="#journal" onClick={(e) => { e.preventDefault(); handleNavClick('#journal'); }}>
             Racing journal
           </a>
-          <Link to="/team" onClick={() => setMenuOpen(false)}>
+          <Link
+            to="/team"
+            className={isTeamActive ? 'active' : ''}
+            onClick={() => setMenuOpen(false)}
+          >
             Team Crew
           </Link>
 

@@ -61,15 +61,7 @@ function Footer({ theme }) {
           <em>line tight.</em>
         </h2>
         <div className="footer-quick-links">
-          <a
-            href="#shop"
-            onClick={(e) => {
-              e.preventDefault();
-              handleNavClick("#shop");
-            }}
-          >
-            Shop Parts
-          </a>
+          <Link to="/shop">Shop Parts</Link>
           <span>/</span>
           <a
             href="#why-us"

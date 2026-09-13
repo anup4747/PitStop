@@ -9,6 +9,8 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Team from "./pages/Team";
+import Shop from "./pages/Shop";
+import ProductDetail from "./pages/ProductDetail";
 
 // ── Theme hook ─────────────────────────────────────────────
 function useTheme() {
@@ -113,6 +115,20 @@ function AppShell() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/team" element={<Team />} />
+            <Route
+              path="/shop"
+              element={
+                <Shop
+                  onAddToCart={handleAddToCart}
+                  search={search}
+                  setSearch={setSearch}
+                />
+              }
+            />
+            <Route
+              path="/product/:id"
+              element={<ProductDetail onAddToCart={handleAddToCart} />}
+            />
             <Route
               path="*"
               element={
