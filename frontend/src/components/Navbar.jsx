@@ -163,14 +163,14 @@ function Navbar({
               onClick={() => setMenuOpen(false)}
               className="mobile-auth-btn"
             >
-              Driver Login
+              Login
             </Link>
             <Link
               to="/signup"
               onClick={() => setMenuOpen(false)}
               className="mobile-auth-btn primary"
             >
-              Join Grid
+              Sign up
             </Link>
           </div>
         </nav>

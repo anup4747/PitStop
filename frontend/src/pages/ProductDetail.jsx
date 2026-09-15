@@ -1,7 +1,8 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { getProductById, getRelatedProducts } from "../data/products";
 import "./ProductDetail.css";
+import "./Shop.css";
 
 const icon = (name) => {
   const paths = {
@@ -74,12 +75,16 @@ function ProductDetail({ onAddToCart }) {
   const [activeTab, setActiveTab] = useState("specs"); // 'specs' | 'compat' | 'maintenance'
 
   // Sync option when product changes
-  useMemo(() => {
-    if (product?.options?.values?.length) {
-      setSelectedOption(product.options.values[0]);
-    }
-    setActiveImageIndex(0);
-    setQuantity(1);
+  useEffect(() => {
+    const resetTimer = window.setTimeout(() => {
+      if (product?.options?.values?.length) {
+        setSelectedOption(product.options.values[0]);
+      }
+      setActiveImageIndex(0);
+      setQuantity(1);
+    }, 0);
+
+    return () => window.clearTimeout(resetTimer);
   }, [product]);
 
   const relatedProducts = useMemo(() => {
@@ -137,6 +142,13 @@ function ProductDetail({ onAddToCart }) {
     );
   };
 
+  const handleImageChange = (direction) => {
+    const imageCount = product.images?.length || 1;
+    setActiveImageIndex((currentIndex) =>
+      (currentIndex + direction + imageCount) % imageCount,
+    );
+  };
+
   return (
     <div className="product-detail-page">
       {/* ── Sub Navigation & Breadcrumbs ── */}
@@ -166,6 +178,26 @@ function ProductDetail({ onAddToCart }) {
               alt={`${product.name} view ${activeImageIndex + 1}`}
               className="pd-main-image"
             />
+            {product.images.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  className="pd-gallery-arrow pd-gallery-arrow-left"
+                  onClick={() => handleImageChange(-1)}
+                  aria-label="Show previous product image"
+                >
+                  {icon("arrowLeft")}
+                </button>
+                <button
+                  type="button"
+                  className="pd-gallery-arrow pd-gallery-arrow-right"
+                  onClick={() => handleImageChange(1)}
+                  aria-label="Show next product image"
+                >
+                  {icon("arrowRight")}
+                </button>
+              </>
+            )}
             <span className="pd-badge-pill">{product.badge}</span>
           </div>
 
