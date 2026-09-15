@@ -1,51 +1,10 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import heroKartImg from "../assets/cart23.jpg";
+import { products as catalogProducts, categories as catalogCategories } from "../data/products";
 
-const categories = ["All parts", "Engine", "Brakes", "Chassis", "Safety"];
-
-const products = [
-  {
-    id: 1,
-    name: "Vortex X30 Engine Kit",
-    category: "Engine",
-    price: 749,
-    badge: "Race ready",
-    desc: "Factory blueprinted 125cc engine package with digital CDI",
-    image:
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=900&q=85",
-  },
-  {
-    id: 2,
-    name: "Redline Pro Brake Set",
-    category: "Brakes",
-    price: 189,
-    badge: "Best seller",
-    desc: "Laser-ventilated floating rotor with twin-piston calipers",
-    image:
-      "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=900&q=85",
-  },
-  {
-    id: 3,
-    name: "Apex 30mm Racing Axle",
-    category: "Chassis",
-    price: 95,
-    badge: "New drop",
-    desc: "Cold-drawn chromoly steel with medium-stiff flex characteristics",
-    image:
-      "https://images.unsplash.com/photo-1517846693594-ea5f7d83e371?auto=format&fit=crop&w=900&q=85",
-  },
-  {
-    id: 4,
-    name: "Pitstop Carbon Helmet",
-    category: "Safety",
-    price: 329,
-    badge: "Track tested",
-    desc: "Snell SA2020 homologated ultralight carbon shell",
-    image:
-      "https://images.unsplash.com/photo-1558980664-10ea1a37d7b8?auto=format&fit=crop&w=900&q=85",
-  },
-];
+const categories = catalogCategories;
+const products = catalogProducts;
 
 const icon = (name) => {
   const paths = {
@@ -294,10 +253,16 @@ function Home({ search, setSearch, onAddToCart }) {
         </div>
 
         <div className="product-grid">
-          {visibleProducts.map((product) => (
+          {visibleProducts.slice(0, 8).map((product) => (
             <article className="product-card" key={product.id}>
               <div className="product-image">
-                <img src={product.image} alt={product.name} loading="lazy" />
+                <Link to={`/product/${product.id}`} style={{ display: 'block', width: '100%', height: '100%' }}>
+                  <img
+                    src={(product.images && product.images[0]) || product.image}
+                    alt={product.name}
+                    loading="lazy"
+                  />
+                </Link>
                 <span>{product.badge}</span>
                 <button
                   type="button"
@@ -309,7 +274,11 @@ function Home({ search, setSearch, onAddToCart }) {
               </div>
               <div className="product-info">
                 <p>{product.category}</p>
-                <h3>{product.name}</h3>
+                <h3>
+                  <Link to={`/product/${product.id}`} style={{ color: 'inherit', textDecoration: 'none' }}>
+                    {product.name}
+                  </Link>
+                </h3>
                 <strong>${product.price}</strong>
               </div>
             </article>

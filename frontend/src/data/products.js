@@ -1,6 +1,25 @@
 // Motorsport and Racing Components Catalog
 // Categories: IC Powertrain, Chassis, Steering & Suspension, Braking System, Wheels & Controls
 
+// Dynamically import all local product asset images via Vite eager glob
+const productAssetImages = import.meta.glob(
+  '../assets/products/**/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
+  { eager: true, import: 'default' }
+);
+
+function getLocalImages(folderName) {
+  const matches = Object.entries(productAssetImages)
+    .filter(([filePath]) => {
+      // Normalize both slashes to forward slash for reliable cross-platform comparison
+      const normalized = filePath.replace(/\\/g, '/');
+      return normalized.includes('/' + folderName + '/') || normalized.includes(folderName);
+    })
+    .sort(([pathA], [pathB]) => pathA.localeCompare(pathB))
+    .map(([, mod]) => mod);
+
+  return matches;
+}
+
 export const categories = [
   'All Parts',
   'IC Powertrain',
@@ -17,6 +36,7 @@ export const products = [
     id: 'engine-honda',
     name: 'Engine – Honda GX390 Race Spec',
     category: 'IC Powertrain',
+    folder: 'Engine – Honda',
     price: 849,
     originalPrice: 949,
     badge: 'Race Ready',
@@ -41,16 +61,13 @@ export const products = [
       'Cast iron cylinder liner for extended endurance lifespan'
     ],
     compatible: 'Baja SAE, Formula Kart, Off-Road Trophy Buggies',
-    images: [
-      'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1000&q=85'
-    ]
+    images: getLocalImages('Engine – Honda')
   },
   {
     id: 'cvt-and-belt',
     name: 'CVT & High-Torque Kevlar Belt',
     category: 'IC Powertrain',
+    folder: 'CVT (Continuously Variable Transmission) & CVT Belt',
     price: 489,
     originalPrice: 539,
     badge: 'Best Seller',
@@ -78,16 +95,13 @@ export const products = [
       'Includes high-tensile Kevlar reinforced cogged drive belt'
     ],
     compatible: 'Honda GX390, Briggs & Stratton 10HP, 1-inch shaft racing setups',
-    images: [
-      'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=1000&q=85'
-    ]
+    images: getLocalImages('CVT (Continuously Variable Transmission) & CVT Belt')
   },
   {
     id: 'fuel-tank',
     name: 'Fuel Tank – FIA Spec Aluminum Cell',
     category: 'IC Powertrain',
+    folder: 'Fuel Tank',
     price: 185,
     originalPrice: 210,
     badge: 'FIA Compliant',
@@ -111,16 +125,13 @@ export const products = [
       'Pressure tested to 25 PSI prior to dispatch'
     ],
     compatible: 'Baja SAE chassis, Kart endurance setups, Formula Student fuel systems',
-    images: [
-      'https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=1000&q=85'
-    ]
+    images: getLocalImages('Fuel Tank')
   },
   {
     id: 'gearbox-front-gear',
     name: 'Gearbox / Front Gear Reduction Box',
     category: 'IC Powertrain',
+    folder: 'Gearbox_FrontGear',
     price: 520,
     originalPrice: 580,
     badge: 'Precision CNC',
@@ -148,16 +159,13 @@ export const products = [
       'Direct bolt pattern for tubular chassis motor plates'
     ],
     compatible: 'All Baja SAE 2WD/4WD drivetrains, Custom off-road buggies',
-    images: [
-      'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1000&q=85'
-    ]
+    images: getLocalImages('Gearbox_FrontGear')
   },
   {
     id: 'accelerator-cable',
     name: 'Accelerator Cable / Acc Cable Pro',
     category: 'IC Powertrain',
+    folder: 'Accelerator Cable',
     price: 34,
     originalPrice: 42,
     badge: 'Track Tested',
@@ -180,16 +188,13 @@ export const products = [
       'Dual locking knurled barrel adjusters for easy paddock slack tuning'
     ],
     compatible: 'Honda GX series, Mikuni carbs, standard racing pedals',
-    images: [
-      'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1000&q=85'
-    ]
+    images: getLocalImages('Accelerator Cable')
   },
   {
     id: 'differential',
     name: 'Differential – Lightweight Torsen Racing LSD',
     category: 'IC Powertrain',
+    folder: 'Differential',
     price: 640,
     originalPrice: 710,
     badge: 'Paddock Spec',
@@ -213,16 +218,13 @@ export const products = [
       'Sealed cartridge high-capacity angular contact bearings included'
     ],
     compatible: 'Baja SAE rear and 4WD front drive units, Formula Student drive axle',
-    images: [
-      'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=1000&q=85'
-    ]
+    images: getLocalImages('Differential')
   },
   {
     id: 'kill-switch',
     name: 'Kill Switch – Master Emergency Cutoff',
     category: 'IC Powertrain',
+    folder: 'Kill Switch',
     price: 38,
     originalPrice: 48,
     badge: 'Rulebook Mandated',
@@ -245,11 +247,7 @@ export const products = [
       'Gold-plated brass contacts ensure corrosion resistance in wet track conditions'
     ],
     compatible: 'All combustion racing engines, karts, formula cars, off-road rigs',
-    images: [
-      'https://images.unsplash.com/photo-1558980664-10ea1a37d7b8?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1000&q=85'
-    ]
+    images: getLocalImages('Kill Switch')
   },
 
   // ==========================================
@@ -259,6 +257,7 @@ export const products = [
     id: 'aisi-tubing',
     name: 'AISI 4130 Chromoly Chassis Tubing',
     category: 'Chassis & Suspension',
+    folder: 'AISI Tubing',
     price: 110,
     originalPrice: 130,
     badge: 'SAE Certified',
@@ -286,16 +285,13 @@ export const products = [
       'Phosphate coated for oxidation resistance during storage and layout fabrication'
     ],
     compatible: 'Baja SAE Primary Roll Hoop, Roll Cage Bracing, Suspension A-Arms',
-    images: [
-      'https://images.unsplash.com/photo-1517846693594-ea5f7d83e371?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=1000&q=85'
-    ]
+    images: getLocalImages('AISI Tubing')
   },
   {
     id: 'rack-and-pinion',
     name: 'Rack & Pinion – Quick-Ratio Steering Unit',
     category: 'Chassis & Suspension',
+    folder: 'Rack & Pinion',
     price: 245,
     originalPrice: 285,
     badge: 'Precision CNC',
@@ -319,16 +315,13 @@ export const products = [
       'Low backlash (< 0.05 mm) ensures instant apex positioning'
     ],
     compatible: 'Formula Student, Baja SAE, Cross-Kart, Mini Trophy Trucks',
-    images: [
-      'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1517846693594-ea5f7d83e371?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1000&q=85'
-    ]
+    images: getLocalImages('Rack & Pinion')
   },
   {
     id: 'universal-joint-shaft',
     name: 'Universal Joint & Splined Steering Shaft',
     category: 'Chassis & Suspension',
+    folder: 'Universal Joint & Shaft',
     price: 88,
     originalPrice: 105,
     badge: 'Heavy Duty',
@@ -351,16 +344,13 @@ export const products = [
       'Includes stainless pinch bolts and nylon locking hardware'
     ],
     compatible: 'All racing steering columns, racks, and quick-disconnect hubs',
-    images: [
-      'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1517846693594-ea5f7d83e371?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1000&q=85'
-    ]
+    images: getLocalImages('Universal Joint & Shaft')
   },
   {
     id: 'suspension-fox-afco',
     name: 'Suspension – Fox & AFCO Racing Coilovers',
     category: 'Chassis & Suspension',
+    folder: 'Suspension (Fox, Rambal',
     price: 795,
     originalPrice: 890,
     badge: 'Track Proven',
@@ -387,16 +377,13 @@ export const products = [
       'Dyno tested with matching individual damping calibration sheets'
     ],
     compatible: 'Baja SAE double A-arm front & trailing arm rear suspension setups',
-    images: [
-      'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1517846693594-ea5f7d83e371?auto=format&fit=crop&w=1000&q=85'
-    ]
+    images: getLocalImages('Suspension (Fox, Rambal')
   },
   {
     id: 'steering-knuckle',
     name: 'Steering Knuckle / Front Upright (Pair)',
     category: 'Chassis & Suspension',
+    folder: 'Steering Knuckle',
     price: 310,
     originalPrice: 350,
     badge: 'Billet CNC',
@@ -419,11 +406,7 @@ export const products = [
       'Sold as a matched pair (Left and Right front uprights)'
     ],
     compatible: 'Baja SAE, Formula Student, Custom Kart Front Geometry',
-    images: [
-      'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1517846693594-ea5f7d83e371?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1000&q=85'
-    ]
+    images: getLocalImages('Steering Knuckle')
   },
 
   // ==========================================
@@ -433,6 +416,7 @@ export const products = [
     id: 'tandem-master-cylinder',
     name: 'Tandem Master Cylinder (TMC) & Bias Bar',
     category: 'Braking System',
+    folder: 'Tandem Master Cylinder (TMC)',
     price: 195,
     originalPrice: 230,
     badge: 'Safety First',
@@ -459,16 +443,13 @@ export const products = [
       'Includes remote mounting brackets and braided fluid feed hoses'
     ],
     compatible: 'Baja SAE, Formula Student, Go-Kart, Lightweight Race Buggies',
-    images: [
-      'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1000&q=85'
-    ]
+    images: getLocalImages('Tandem Master Cylinder (TMC)')
   },
   {
     id: 'brake-disc',
     name: 'Brake Disc – Laser Ventilated Floating Rotor',
     category: 'Braking System',
+    folder: 'Braking Disk',
     price: 78,
     originalPrice: 95,
     badge: 'Track Tested',
@@ -496,16 +477,13 @@ export const products = [
       'Electrostatic black inner coating inhibits track-mud corrosion'
     ],
     compatible: 'Pitstop Brake Caliper, Baja wheel hubs, Kart axle adapters',
-    images: [
-      'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1517846693594-ea5f7d83e371?auto=format&fit=crop&w=1000&q=85'
-    ]
+    images: getLocalImages('Braking Disk')
   },
   {
     id: 'brake-caliper',
     name: 'Brake Caliper – Twin-Piston Hydraulic Unit',
     category: 'Braking System',
+    folder: 'Brake Caliper',
     price: 115,
     originalPrice: 135,
     badge: 'Best Seller',
@@ -529,16 +507,13 @@ export const products = [
       'Handles extreme rotor temperatures up to 600°C without brake fluid boiling'
     ],
     compatible: 'Pitstop 160-200mm brake discs, front steering knuckles, rear swingarms',
-    images: [
-      'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=1000&q=85'
-    ]
+    images: getLocalImages('Brake Caliper')
   },
   {
     id: 'brake-pedal',
     name: 'Brake Pedal – Ergonomic Billet 6061 Assembly',
     category: 'Braking System',
+    folder: 'Brake Pedal',
     price: 72,
     originalPrice: 85,
     badge: 'Ergonomic Spec',
@@ -561,16 +536,13 @@ export const products = [
       'Pre-drilled clevis holes for direct attachment to TMC balance bar'
     ],
     compatible: 'All tubular chassis footboxes, Baja SAE, Formula Student',
-    images: [
-      'https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1558980664-10ea1a37d7b8?auto=format&fit=crop&w=1000&q=85'
-    ]
+    images: getLocalImages('Brake Pedal')
   },
   {
     id: 'hose-pipe',
     name: 'Hose Pipe – Stainless Steel Braided Brake Lines',
     category: 'Braking System',
+    folder: 'Hose Pipe',
     price: 49,
     originalPrice: 60,
     badge: 'High Pressure',
@@ -597,11 +569,7 @@ export const products = [
       'Includes copper crush washers and Grade 8.8 banjo bolts'
     ],
     compatible: 'TMC master cylinder, twin-piston calipers, standard M10 banjo systems',
-    images: [
-      'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1000&q=85'
-    ]
+    images: getLocalImages('Hose Pipe')
   },
 
   // ==========================================
@@ -611,6 +579,7 @@ export const products = [
     id: 'wheel-hub',
     name: 'Wheel Hub – 4-Bolt Precision Billet Hub (Pair)',
     category: 'Wheels & Controls',
+    folder: 'Wheel Hub',
     price: 145,
     originalPrice: 170,
     badge: 'Billet CNC',
@@ -637,16 +606,13 @@ export const products = [
       'Precision machined runout within 0.02mm eliminates high-speed steering vibration'
     ],
     compatible: 'Baja SAE front/rear axles, ATV rims, Track Kart hubs',
-    images: [
-      'https://images.unsplash.com/photo-1517846693594-ea5f7d83e371?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=1000&q=85'
-    ]
+    images: getLocalImages('Wheel Hub')
   },
   {
     id: 'tyres-and-rims',
     name: 'Tyres & Rims – All-Terrain Beadlock Wheel Set',
     category: 'Wheels & Controls',
+    folder: 'Tyres & Rims',
     price: 360,
     originalPrice: 420,
     badge: 'All-Terrain',
@@ -673,16 +639,13 @@ export const products = [
       'Pre-mounted and balanced ready to bolt onto paddock wheel hubs'
     ],
     compatible: 'Baja SAE competitions, Off-road buggies, Utility ATVs',
-    images: [
-      'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1517846693594-ea5f7d83e371?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1000&q=85'
-    ]
+    images: getLocalImages('Tyres & Rims')
   },
   {
     id: 'accelerator-pedal',
     name: 'Accelerator Pedal / Acc Paddle Pro',
     category: 'Wheels & Controls',
+    folder: 'Accelerator Pedal',
     price: 65,
     originalPrice: 78,
     badge: 'Ergonomic Spec',
@@ -705,16 +668,13 @@ export const products = [
       'Lightweight skeletonized arm with chamfered edges'
     ],
     compatible: 'Pitstop Accelerator Cable, Honda GX carbs, standard footboxes',
-    images: [
-      'https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1558980664-10ea1a37d7b8?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1000&q=85'
-    ]
+    images: getLocalImages('Accelerator Pedal')
   },
   {
     id: 'harness',
     name: 'Harness – 5-Point Camlock FIA & SFI Spec',
     category: 'Wheels & Controls',
+    folder: 'Harness',
     price: 165,
     originalPrice: 195,
     badge: 'FIA / SFI Certified',
@@ -741,11 +701,7 @@ export const products = [
       'Meets all SAE BAJA, Formula Student, and SCCA club racing tech regulations'
     ],
     compatible: 'All racing seats, roll cage harness cross-bars, cockpit tubs',
-    images: [
-      'https://images.unsplash.com/photo-1558980664-10ea1a37d7b8?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1000&q=85'
-    ]
+    images: getLocalImages('Harness')
   }
 ];
 

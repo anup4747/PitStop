@@ -561,8 +561,12 @@
   }
 
   .member-image-box {
-    aspect-ratio: 16 / 11;
+    aspect-ratio: 4 / 5;
     border-radius: 14px;
+  }
+
+  .member-image {
+    object-position: center 20%;
   }
 
   .member-image,
