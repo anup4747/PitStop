@@ -11,6 +11,7 @@ import Signup from "./pages/Signup";
 import Team from "./pages/Team";
 import Shop from "./pages/Shop";
 import ProductDetail from "./pages/ProductDetail";
+import Admin from "./pages/Admin";
 
 // ── Theme hook ─────────────────────────────────────────────
 function useTheme() {
@@ -74,6 +75,7 @@ function RouteTransition({ children }) {
 }
 
 function AppShell() {
+  const location = useLocation();
   const [search, setSearch] = useState("");
   const [cartCount, setCartCount] = useState(0);
   const { theme, toggleTheme } = useTheme();
@@ -88,17 +90,21 @@ function AppShell() {
     );
   };
 
+  const isAdminRoute = location.pathname.startsWith("/admin");
+
   return (
     <div className="site-shell">
       <ScrollToTop />
-      <Navbar
-        search={search}
-        setSearch={setSearch}
-        cartCount={cartCount}
-        onCartClick={handleCartClick}
-        theme={theme}
-        onToggleTheme={toggleTheme}
-      />
+      {!isAdminRoute && (
+        <Navbar
+          search={search}
+          setSearch={setSearch}
+          cartCount={cartCount}
+          onCartClick={handleCartClick}
+          theme={theme}
+          onToggleTheme={toggleTheme}
+        />
+      )}
       <RouteTransition>
         {(location) => (
           <Routes location={location}>
@@ -130,6 +136,12 @@ function AppShell() {
               element={<ProductDetail onAddToCart={handleAddToCart} />}
             />
             <Route
+              path="/admin"
+              element={
+                <Admin theme={theme} onToggleTheme={toggleTheme} />
+              }
+            />
+            <Route
               path="*"
               element={
                 <Home
@@ -142,7 +154,7 @@ function AppShell() {
           </Routes>
         )}
       </RouteTransition>
-      <Footer theme={theme} />
+      {!isAdminRoute && <Footer theme={theme} />}
     </div>
   );
 }
