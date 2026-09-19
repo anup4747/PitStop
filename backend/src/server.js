@@ -105,7 +105,7 @@ app.get("/api/products/:slug", async (req, res) => {
   const { data, error } = await supabase
     .from("products")
     .select(
-      "*, categories!inner(id, name, slug), product_images(id, image_url, alt_text, sort_order), product_reviews(id, rating, title, body, created_at)",
+      "*, categories!inner(id, name, slug), product_images(id, image_url, alt_text, sort_order)",
     )
     .eq("slug", req.params.slug)
     .eq("is_active", true)
