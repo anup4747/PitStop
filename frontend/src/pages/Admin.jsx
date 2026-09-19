@@ -276,7 +276,7 @@ function Admin({ theme = "dark", onToggleTheme }) {
   // Navigation State
   const [currentSection, setCurrentSection] = useState("Dashboard");
   const [productsSubView, setProductsSubView] = useState("All"); // 'All' | 'Add' | 'Categories'
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const closeSidebarOnSmallScreen = () => {
     if (window.matchMedia("(max-width: 1100px)").matches) {
