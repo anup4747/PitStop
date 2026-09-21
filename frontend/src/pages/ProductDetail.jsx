@@ -159,8 +159,8 @@ function ProductDetail({ onAddToCart, products, isCatalogLoading }) {
 
   const handleImageChange = (direction) => {
     const imageCount = product.images?.length || 1;
-    setActiveImageIndex((currentIndex) =>
-      (currentIndex + direction + imageCount) % imageCount,
+    setActiveImageIndex(
+      (currentIndex) => (currentIndex + direction + imageCount) % imageCount,
     );
   };
 
