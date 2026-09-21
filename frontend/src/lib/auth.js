@@ -1,10 +1,14 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const API_URL = import.meta.env.VITE_API_URL;
 const SESSION_KEY = "pitstop-auth-session";
 
 const getStorage = (rememberMe) =>
   rememberMe ? window.localStorage : window.sessionStorage;
 
 const requestAuth = async (path, body) => {
+  if (!API_URL) {
+    throw new Error("VITE_API_URL is not configured.");
+  }
+
   const response = await fetch(`${API_URL}/api/auth/${path}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

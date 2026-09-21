@@ -1,11 +1,17 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const API_URL = import.meta.env.VITE_API_URL;
 
 const request = async (path) => {
+  if (!API_URL) {
+    throw new Error("VITE_API_URL is not configured.");
+  }
+
   const response = await fetch(`${API_URL}/api/${path}`);
   const payload = await response.json().catch(() => ({}));
 
   if (!response.ok) {
-    throw new Error(payload.error || `Catalog request failed: ${response.status}`);
+    throw new Error(
+      payload.error || `Catalog request failed: ${response.status}`,
+    );
   }
 
   return payload.data || [];
@@ -44,7 +50,12 @@ export const fetchCatalog = async () => {
   };
 };
 
-export const getRelatedProducts = (products, currentId, category, limit = 4) => {
+export const getRelatedProducts = (
+  products,
+  currentId,
+  category,
+  limit = 4,
+) => {
   const sameCategory = products.filter(
     (product) => product.category === category && product.id !== currentId,
   );

@@ -6,7 +6,7 @@ Node.js API for the Pitstop Solutions storefront. Supabase provides PostgreSQL, 
 
 1. Create a Supabase project.
 2. Open the Supabase SQL editor and run [`supabase/schema.sql`](supabase/schema.sql).
-3. Copy `.env.example` to `.env` and set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`.
+3. Copy `.env.example` to `.env` and set `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and `FRONTEND_URL`.
 4. Install and start the API:
 
 ```powershell
