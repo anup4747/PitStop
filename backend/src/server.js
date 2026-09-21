@@ -25,11 +25,12 @@ const supabase =
 
 const app = express();
 const port = Number(process.env.PORT) || 3000;
+const frontendUrl = process.env.FRONTEND_URL?.replace(/\/+$/, "");
 
 app.use(helmet());
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: frontendUrl,
   }),
 );
 app.use(express.json({ limit: "1mb" }));
