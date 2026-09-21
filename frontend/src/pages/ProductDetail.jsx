@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { getRelatedProducts } from "../lib/catalog";
+import { getRelatedProducts } from "../data/products";
 import "./ProductDetail.css";
 import "./Shop.css";
 
@@ -92,7 +92,7 @@ function ProductDetail({ onAddToCart, products, isCatalogLoading }) {
 
   const relatedProducts = useMemo(() => {
     if (!product) return [];
-    return getRelatedProducts(products, product.id, product.category, 4);
+    return getRelatedProducts(product.id, product.category, 4);
   }, [product, products]);
 
   if (isCatalogLoading && !product) {

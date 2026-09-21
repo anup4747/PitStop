@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { clearSession, getSession } from "./lib/auth";
-import { fetchCatalog } from "./lib/catalog";
 import {
   categories as initialCategories,
   products as initialProducts,
@@ -85,11 +84,10 @@ function AppShell() {
   const [search, setSearch] = useState("");
   const [cartCount, setCartCount] = useState(0);
   const [session, setSession] = useState(() => getSession());
-  const [catalog, setCatalog] = useState({
+  const catalog = {
     categories: initialCategories,
     products: initialProducts,
-  });
-  const [isCatalogLoading, setIsCatalogLoading] = useState(true);
+  };
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
@@ -97,29 +95,6 @@ function AppShell() {
     window.addEventListener("pitstop-auth-changed", handleAuthChange);
     return () =>
       window.removeEventListener("pitstop-auth-changed", handleAuthChange);
-  }, []);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    fetchCatalog()
-      .then((remoteCatalog) => {
-        if (isMounted) {
-          setCatalog(remoteCatalog);
-        }
-      })
-      .catch((error) => {
-        console.error("Unable to load catalog from backend:", error);
-      })
-      .finally(() => {
-        if (isMounted) {
-          setIsCatalogLoading(false);
-        }
-      });
-
-    return () => {
-      isMounted = false;
-    };
   }, []);
 
   const handleAddToCart = () => {
@@ -161,7 +136,7 @@ function AppShell() {
                   onAddToCart={handleAddToCart}
                   categories={catalog.categories}
                   products={catalog.products}
-                  isCatalogLoading={isCatalogLoading}
+                  isCatalogLoading={false}
                 />
               }
             />
@@ -177,7 +152,7 @@ function AppShell() {
                   setSearch={setSearch}
                   categories={catalog.categories}
                   products={catalog.products}
-                  isCatalogLoading={isCatalogLoading}
+                  isCatalogLoading={false}
                 />
               }
             />
@@ -187,7 +162,7 @@ function AppShell() {
                 <ProductDetail
                   onAddToCart={handleAddToCart}
                   products={catalog.products}
-                  isCatalogLoading={isCatalogLoading}
+                  isCatalogLoading={false}
                 />
               }
             />
@@ -206,7 +181,7 @@ function AppShell() {
                   onAddToCart={handleAddToCart}
                   categories={catalog.categories}
                   products={catalog.products}
-                  isCatalogLoading={isCatalogLoading}
+                  isCatalogLoading={false}
                 />
               }
             />
