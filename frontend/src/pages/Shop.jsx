@@ -1,6 +1,5 @@
 import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { categories, products } from '../data/products'
 import './Shop.css'
 
 const icon = (name) => {
@@ -52,7 +51,7 @@ const icon = (name) => {
   )
 }
 
-function Shop({ onAddToCart, search, setSearch }) {
+function Shop({ onAddToCart, search, setSearch, categories, products }) {
   const [activeCategory, setActiveCategory] = useState('All Parts')
   const [sortBy, setSortBy] = useState('featured')
   const [onlyInStock, setOnlyInStock] = useState(false)

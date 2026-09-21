@@ -245,6 +245,26 @@
   box-shadow: 0 6px 20px rgba(239, 73, 56, 0.45);
 }
 
+.auth-submit-btn:disabled {
+  cursor: wait;
+  opacity: 0.7;
+  transform: none;
+}
+
+.auth-error,
+.auth-notice {
+  margin: -4px 0 0;
+  font: 400 12px/1.5 var(--font-mono);
+}
+
+.auth-error {
+  color: #d94b3d;
+}
+
+.auth-notice {
+  color: #3e8b61;
+}
+
 .auth-switch {
   margin-top: 24px;
   text-align: center;

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { saveSession, signUp } from '../lib/auth'
 import './Auth.css'
 
 function Signup() {
@@ -7,12 +8,30 @@ function Signup() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
+  const [error, setError] = useState('')
+  const [notice, setNotice] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const navigate = useNavigate()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Simulated account creation
-    navigate('/')
+    setError('')
+    setNotice('')
+    setIsSubmitting(true)
+
+    try {
+      const data = await signUp({ fullName: name, email, password })
+      if (data.session) {
+        saveSession(data.session, true)
+        navigate('/')
+      } else {
+        setNotice('Account created. Check your email to confirm your account, then sign in.')
+      }
+    } catch (submitError) {
+      setError(submitError.message)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -98,8 +117,11 @@ function Signup() {
             </div>
           </div>
 
-          <button type="submit" className="auth-submit-btn">
-            Create Account
+          {error && <p className="auth-error" role="alert">{error}</p>}
+          {notice && <p className="auth-notice" role="status">{notice}</p>}
+
+          <button type="submit" className="auth-submit-btn" disabled={isSubmitting}>
+            {isSubmitting ? 'Creating Account...' : 'Create Account'}
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M5 12h14" />
               <path d="m13 6 6 6-6 6" />

@@ -1,10 +1,6 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import heroKartImg from "../assets/cart23.jpg";
-import { products as catalogProducts, categories as catalogCategories } from "../data/products";
-
-const categories = catalogCategories;
-const products = catalogProducts;
 
 const icon = (name) => {
   const paths = {
@@ -39,7 +35,7 @@ const icon = (name) => {
   );
 };
 
-function Home({ search, setSearch, onAddToCart }) {
+function Home({ search, setSearch, onAddToCart, categories, products }) {
   const [activeCategory, setActiveCategory] = useState("All parts");
 
   const visibleProducts = useMemo(() => {

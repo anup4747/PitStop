@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { saveSession, signIn } from '../lib/auth'
 import './Auth.css'
 
 function Login() {
@@ -7,12 +8,24 @@ function Login() {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
+  const [error, setError] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const navigate = useNavigate()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Simulated sign-in
-    navigate('/')
+    setError('')
+    setIsSubmitting(true)
+
+    try {
+      const data = await signIn({ email, password })
+      saveSession(data.session, rememberMe)
+      navigate('/')
+    } catch (submitError) {
+      setError(submitError.message)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -107,8 +120,10 @@ function Login() {
             <span>Remember me</span>
           </label>
 
-          <button type="submit" className="auth-submit-btn">
-            Sign In
+          {error && <p className="auth-error" role="alert">{error}</p>}
+
+          <button type="submit" className="auth-submit-btn" disabled={isSubmitting}>
+            {isSubmitting ? 'Signing In...' : 'Sign In'}
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M5 12h14" />
               <path d="m13 6 6 6-6 6" />

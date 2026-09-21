@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { getProductById, getRelatedProducts } from "../data/products";
+import { getRelatedProducts } from "../lib/catalog";
 import "./ProductDetail.css";
 import "./Shop.css";
 
@@ -61,10 +61,13 @@ const icon = (name) => {
   );
 };
 
-function ProductDetail({ onAddToCart }) {
+function ProductDetail({ onAddToCart, products, isCatalogLoading }) {
   const { id } = useParams();
   const navigate = useNavigate();
-  const product = useMemo(() => getProductById(id), [id]);
+  const product = useMemo(
+    () => products.find((item) => item.id === id),
+    [id, products],
+  );
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(() => {
@@ -89,8 +92,20 @@ function ProductDetail({ onAddToCart }) {
 
   const relatedProducts = useMemo(() => {
     if (!product) return [];
-    return getRelatedProducts(product.id, product.category, 4);
-  }, [product]);
+    return getRelatedProducts(products, product.id, product.category, 4);
+  }, [product, products]);
+
+  if (isCatalogLoading && !product) {
+    return (
+      <div className="product-detail-page">
+        <div style={{ padding: "80px 6vw", textAlign: "center" }}>
+          <h1 style={{ font: "800 48px var(--font-display)" }}>
+            Loading Paddock Catalog
+          </h1>
+        </div>
+      </div>
+    );
+  }
 
   if (!product) {
     return (

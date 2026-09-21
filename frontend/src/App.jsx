@@ -1,5 +1,11 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { clearSession, getSession } from "./lib/auth";
+import { fetchCatalog } from "./lib/catalog";
+import {
+  categories as initialCategories,
+  products as initialProducts,
+} from "./data/products";
 import "./App.css";
 import "./pages/Auth.css";
 
@@ -78,7 +84,43 @@ function AppShell() {
   const location = useLocation();
   const [search, setSearch] = useState("");
   const [cartCount, setCartCount] = useState(0);
+  const [session, setSession] = useState(() => getSession());
+  const [catalog, setCatalog] = useState({
+    categories: initialCategories,
+    products: initialProducts,
+  });
+  const [isCatalogLoading, setIsCatalogLoading] = useState(true);
   const { theme, toggleTheme } = useTheme();
+
+  useEffect(() => {
+    const handleAuthChange = () => setSession(getSession());
+    window.addEventListener("pitstop-auth-changed", handleAuthChange);
+    return () =>
+      window.removeEventListener("pitstop-auth-changed", handleAuthChange);
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    fetchCatalog()
+      .then((remoteCatalog) => {
+        if (isMounted) {
+          setCatalog(remoteCatalog);
+        }
+      })
+      .catch((error) => {
+        console.error("Unable to load catalog from backend:", error);
+      })
+      .finally(() => {
+        if (isMounted) {
+          setIsCatalogLoading(false);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const handleAddToCart = () => {
     setCartCount((count) => count + 1);
@@ -103,6 +145,8 @@ function AppShell() {
           onCartClick={handleCartClick}
           theme={theme}
           onToggleTheme={toggleTheme}
+          session={session}
+          onLogout={clearSession}
         />
       )}
       <RouteTransition>
@@ -115,6 +159,9 @@ function AppShell() {
                   search={search}
                   setSearch={setSearch}
                   onAddToCart={handleAddToCart}
+                  categories={catalog.categories}
+                  products={catalog.products}
+                  isCatalogLoading={isCatalogLoading}
                 />
               }
             />
@@ -128,12 +175,21 @@ function AppShell() {
                   onAddToCart={handleAddToCart}
                   search={search}
                   setSearch={setSearch}
+                  categories={catalog.categories}
+                  products={catalog.products}
+                  isCatalogLoading={isCatalogLoading}
                 />
               }
             />
             <Route
               path="/product/:id"
-              element={<ProductDetail onAddToCart={handleAddToCart} />}
+              element={
+                <ProductDetail
+                  onAddToCart={handleAddToCart}
+                  products={catalog.products}
+                  isCatalogLoading={isCatalogLoading}
+                />
+              }
             />
             <Route
               path="/admin"
@@ -148,6 +204,9 @@ function AppShell() {
                   search={search}
                   setSearch={setSearch}
                   onAddToCart={handleAddToCart}
+                  categories={catalog.categories}
+                  products={catalog.products}
+                  isCatalogLoading={isCatalogLoading}
                 />
               }
             />

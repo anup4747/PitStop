@@ -19,6 +19,8 @@ The API runs on `http://localhost:3000` by default.
 ## Routes
 
 - `GET /api/health`
+- `POST /api/auth/signup` with `{ "fullName", "email", "password" }`
+- `POST /api/auth/login` with `{ "email", "password" }`
 - `GET /api/categories`
 - `GET /api/products?category=braking-system&search=caliper`
 - `GET /api/products/:slug`

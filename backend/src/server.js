@@ -39,6 +39,65 @@ app.get("/api/health", (_req, res) => {
   });
 });
 
+const authErrorStatus = (error) => {
+  if (error?.status === 400 || error?.code === "invalid_credentials") {
+    return 400;
+  }
+
+  if (error?.status === 422) {
+    return 422;
+  }
+
+  return 500;
+};
+
+app.post("/api/auth/signup", async (req, res) => {
+  if (!supabase) {
+    return res.status(503).json({ error: "Supabase is not configured." });
+  }
+
+  const { email, password, fullName } = req.body ?? {};
+  if (!email || !password || !fullName) {
+    return res
+      .status(400)
+      .json({ error: "Full name, email, and password are required." });
+  }
+
+  const { data, error } = await supabase.auth.signUp({
+    email: email.trim(),
+    password,
+    options: { data: { full_name: fullName.trim() } },
+  });
+
+  if (error) {
+    return res.status(authErrorStatus(error)).json({ error: error.message });
+  }
+
+  return res.status(201).json({ data });
+});
+
+app.post("/api/auth/login", async (req, res) => {
+  if (!supabase) {
+    return res.status(503).json({ error: "Supabase is not configured." });
+  }
+
+  const { email, password } = req.body ?? {};
+  if (!email || !password) {
+    return res.status(400).json({ error: "Email and password are required." });
+  }
+
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: email.trim(),
+    password,
+  });
+
+  if (error) {
+    return res.status(authErrorStatus(error)).json({ error: error.message });
+  }
+
+  return res.json({ data });
+});
+
 app.get("/api/categories", async (_req, res) => {
   if (!supabase) {
     return res.status(503).json({ error: "Supabase is not configured." });
@@ -68,7 +127,7 @@ app.get("/api/products", async (req, res) => {
   let query = supabase
     .from("products")
     .select(
-      "*, categories!inner(id, name, slug), product_images(id, image_url, alt_text, sort_order)",
+      "*, categories!inner(id, name, slug), product_images(id, image_url, alt_text, sort_order), inventory(stock_count)",
       { count: "exact" },
     )
     .eq("is_active", true)
@@ -105,7 +164,7 @@ app.get("/api/products/:slug", async (req, res) => {
   const { data, error } = await supabase
     .from("products")
     .select(
-      "*, categories!inner(id, name, slug), product_images(id, image_url, alt_text, sort_order)",
+      "*, categories!inner(id, name, slug), product_images(id, image_url, alt_text, sort_order), inventory(stock_count)",
     )
     .eq("slug", req.params.slug)
     .eq("is_active", true)
