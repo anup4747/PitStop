@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   products as initialProducts,
@@ -248,6 +248,12 @@ const icon = (name) => {
       </>
     ),
     chevronDown: <polyline points="6 9 12 15 18 9" />,
+    logout: (
+      <>
+        <path d="M10 17l5-5-5-5M15 12H3" />
+        <path d="M13 4h5a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-5" />
+      </>
+    ),
     menu: (
       <>
         <line x1="4" y1="6" x2="20" y2="6" />
@@ -272,11 +278,34 @@ const icon = (name) => {
   );
 };
 
-function Admin({ theme = "dark", onToggleTheme }) {
+function Admin({ theme = "dark", onToggleTheme, onLogout, session }) {
   // Navigation State
   const [currentSection, setCurrentSection] = useState("Dashboard");
   const [productsSubView, setProductsSubView] = useState("All"); // 'All' | 'Add' | 'Categories'
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const profileRef = useRef(null);
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setProfileOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, []);
+
+  const fullName = session?.user?.user_metadata?.full_name || "PitStop Admin";
+  const email = session?.user?.email || "Admin account";
+  const initials = fullName
+    .split(" ")
+    .filter(Boolean)
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 
   const closeSidebarOnSmallScreen = () => {
     if (window.matchMedia("(max-width: 1100px)").matches) {
@@ -695,13 +724,64 @@ function Admin({ theme = "dark", onToggleTheme }) {
               <span>Customer Shop</span> {icon("arrow")}
             </Link>
 
-            {/* Admin Avatar */}
-            <div className="admin-user-badge">
-              <span className="admin-user-avatar">AD</span>
-              <div className="admin-user-info">
-                <strong>Admin</strong>
-                <small>Store Owner</small>
-              </div>
+            <div className="admin-profile-menu" ref={profileRef}>
+              <button
+                type="button"
+                className={`admin-user-badge${profileOpen ? " active" : ""}`}
+                onClick={() => setProfileOpen((isOpen) => !isOpen)}
+                aria-label="Open admin profile menu"
+                aria-expanded={profileOpen}
+              >
+                <span className="admin-user-avatar">{initials || "AD"}</span>
+                <span className="admin-user-info">
+                  <strong>{fullName}</strong>
+                  <small>Store Owner</small>
+                </span>
+                {icon("chevronDown")}
+              </button>
+
+              {profileOpen && (
+                <div className="admin-profile-dropdown" role="menu">
+                  <div className="admin-profile-summary">
+                    <span className="admin-user-avatar admin-user-avatar-large">
+                      {initials || "AD"}
+                    </span>
+                    <div>
+                      <strong>{fullName}</strong>
+                      <span>{email}</span>
+                    </div>
+                  </div>
+                  <div className="admin-profile-divider" />
+                  <Link
+                    to="/shop"
+                    className="admin-profile-menu-item"
+                    onClick={() => setProfileOpen(false)}
+                  >
+                    {icon("back")}
+                    <span>View storefront</span>
+                  </Link>
+                  <button
+                    type="button"
+                    className="admin-profile-menu-item"
+                    onClick={() => {
+                      setProfileOpen(false);
+                      alert("Account settings are coming soon.");
+                    }}
+                  >
+                    {icon("settings")}
+                    <span>Account settings</span>
+                  </button>
+                  <div className="admin-profile-divider" />
+                  <button
+                    type="button"
+                    className="admin-profile-menu-item admin-profile-signout"
+                    onClick={onLogout}
+                  >
+                    {icon("logout")}
+                    <span>Sign out</span>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </header>

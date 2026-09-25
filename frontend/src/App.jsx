@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import { clearSession, getSession } from "./lib/auth";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
+import { clearSession, getProfile, getSession, signOut } from "./lib/auth";
 import {
   categories as initialCategories,
   products as initialProducts,
@@ -12,6 +18,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import AdminLogin from "./pages/AdminLogin";
 import Signup from "./pages/Signup";
 import Team from "./pages/Team";
 import Shop from "./pages/Shop";
@@ -79,8 +86,49 @@ function RouteTransition({ children }) {
   );
 }
 
+function AdminGuard({ children }) {
+  const navigate = useNavigate();
+  const [status, setStatus] = useState("checking");
+
+  useEffect(() => {
+    const session = getSession();
+    if (!session?.access_token) {
+      navigate("/admin/login", { replace: true });
+      return;
+    }
+
+    getProfile(session)
+      .then(({ profile }) => {
+        if (profile?.role === "admin") {
+          setStatus("allowed");
+          return;
+        }
+
+        clearSession();
+        navigate("/admin/login", { replace: true });
+      })
+      .catch(() => {
+        clearSession();
+        navigate("/admin/login", { replace: true });
+      });
+  }, [navigate]);
+
+  if (status !== "allowed") {
+    return (
+      <div className="auth-page">
+        <div className="auth-card-simple">
+          <p className="auth-notice">Verifying admin access...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return children;
+}
+
 function AppShell() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [cartCount, setCartCount] = useState(0);
   const [session, setSession] = useState(() => getSession());
@@ -142,6 +190,7 @@ function AppShell() {
             />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/team" element={<Team />} />
             <Route
               path="/shop"
@@ -169,7 +218,18 @@ function AppShell() {
             <Route
               path="/admin"
               element={
-                <Admin theme={theme} onToggleTheme={toggleTheme} />
+                <AdminGuard>
+                  <Admin
+                    theme={theme}
+                    onToggleTheme={toggleTheme}
+                    session={getSession()}
+                    onLogout={() =>
+                      signOut(getSession()).then(() =>
+                        navigate("/admin/login", { replace: true }),
+                      )
+                    }
+                  />
+                </AdminGuard>
               }
             />
             <Route

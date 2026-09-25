@@ -608,6 +608,125 @@
   gap: 10px;
   padding-left: 8px;
   border-left: 1px solid var(--admin-line);
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 0;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.admin-user-badge:hover .admin-user-info strong,
+.admin-user-badge.active .admin-user-info strong,
+.admin-user-badge > .admin-icon {
+  color: var(--admin-orange);
+}
+
+.admin-profile-menu {
+  position: relative;
+}
+
+.admin-profile-menu > .admin-user-badge .admin-icon {
+  width: 14px;
+  height: 14px;
+  color: var(--admin-muted);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.admin-profile-menu > .admin-user-badge.active .admin-icon {
+  transform: rotate(180deg);
+}
+
+.admin-profile-dropdown {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 14px);
+  right: 0;
+  width: 266px;
+  padding: 14px 0;
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-line);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.24);
+}
+
+.admin-profile-summary {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 0 16px 13px;
+}
+
+.admin-profile-summary .admin-user-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  white-space: normal;
+  text-overflow: clip;
+  line-height: 1;
+  text-align: center;
+}
+
+.admin-user-avatar-large {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+}
+
+.admin-profile-summary > div strong,
+.admin-profile-summary > div span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-profile-summary strong {
+  color: var(--admin-text);
+  font: 700 11px var(--font-mono);
+}
+
+.admin-profile-summary div span {
+  max-width: 175px;
+  margin-top: 4px;
+  color: var(--admin-muted);
+  font: 500 9px var(--font-mono);
+}
+
+.admin-profile-divider {
+  height: 1px;
+  margin: 0 12px;
+  background: var(--admin-line);
+}
+
+.admin-profile-menu-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 11px;
+  padding: 11px 16px;
+  border: 0;
+  background: transparent;
+  color: var(--admin-text);
+  font: 600 10.5px var(--font-mono);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.admin-profile-menu-item:hover {
+  background: var(--admin-bg);
+  color: var(--admin-orange);
+}
+
+.admin-profile-menu-item .admin-icon {
+  width: 15px;
+  height: 15px;
+  color: currentColor;
+}
+
+.admin-profile-signout {
+  color: var(--admin-orange);
 }
 
 .admin-user-avatar {

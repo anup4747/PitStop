@@ -1,13 +1,24 @@
 const API_URL = import.meta.env.VITE_API_URL?.replace(/\/+$/, "");
 const SESSION_KEY = "pitstop-auth-session";
 
+const assertApiUrl = () => {
+  if (!API_URL) {
+    throw new Error("VITE_API_URL is not configured.");
+  }
+};
+
+const getSafeSessionDetails = (session) => ({
+  hasSession: Boolean(session),
+  userId: session?.user?.id,
+  hasAccessToken: Boolean(session?.access_token),
+  tokenExpiresAt: session?.expires_at,
+});
+
 const getStorage = (rememberMe) =>
   rememberMe ? window.localStorage : window.sessionStorage;
 
 const requestAuth = async (path, body) => {
-  if (!API_URL) {
-    throw new Error("VITE_API_URL is not configured.");
-  }
+  assertApiUrl();
 
   const response = await fetch(`${API_URL}/api/auth/${path}`, {
     method: "POST",
@@ -28,6 +39,46 @@ export const signUp = ({ fullName, email, password }) =>
 
 export const signIn = ({ email, password }) =>
   requestAuth("login", { email, password });
+
+export const getProfile = async (session) => {
+  assertApiUrl();
+
+  console.log("AUTH REQUEST", {
+    endpoint: `${API_URL}/api/auth/me`,
+    ...getSafeSessionDetails(session),
+  });
+
+  const response = await fetch(`${API_URL}/api/auth/me`, {
+    headers: { Authorization: `Bearer ${session?.access_token || ""}` },
+  });
+  const payload = await response.json().catch(() => ({}));
+
+  console.log("AUTH RESPONSE", {
+    endpoint: `${API_URL}/api/auth/me`,
+    status: response.status,
+    userId: payload.data?.user?.id,
+    profileId: payload.data?.profile?.id,
+    role: payload.data?.profile?.role,
+    error: payload.error,
+  });
+
+  if (!response.ok) {
+    throw new Error(payload.error || "Unable to verify your account.");
+  }
+
+  return payload.data;
+};
+
+export const signOut = async (session) => {
+  if (API_URL && session?.access_token) {
+    await fetch(`${API_URL}/api/auth/logout`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${session.access_token}` },
+    }).catch(() => undefined);
+  }
+
+  clearSession();
+};
 
 export const saveSession = (session, rememberMe) => {
   window.localStorage.removeItem(SESSION_KEY);

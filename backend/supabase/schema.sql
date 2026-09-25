@@ -14,13 +14,10 @@ create type public.address_type as enum ('shipping', 'billing');
 -- Supabase Auth owns auth.users. This table stores app profile data and admin access.
 create table public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
-  email text unique,
-  full_name text not null default '',
-  phone text,
-  avatar_url text,
-  is_admin boolean not null default false,
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
+  name text,
+  email text not null unique,
+  role text not null default 'user' check (role in ('user', 'admin')),
+  created_at timestamptz not null default now()
 );
 
 create table public.categories (
@@ -198,7 +195,6 @@ begin
 end;
 $$;
 
-create trigger profiles_updated_at before update on public.profiles for each row execute function public.set_updated_at();
 create trigger categories_updated_at before update on public.categories for each row execute function public.set_updated_at();
 create trigger products_updated_at before update on public.products for each row execute function public.set_updated_at();
 create trigger inventory_updated_at before update on public.inventory for each row execute function public.set_updated_at();
@@ -215,8 +211,13 @@ security definer
 set search_path = public
 as $$
 begin
-  insert into public.profiles (id, email, full_name)
-  values (new.id, new.email, coalesce(new.raw_user_meta_data ->> 'full_name', ''));
+  insert into public.profiles (id, name, email, role)
+  values (
+    new.id,
+    coalesce(new.raw_user_meta_data ->> 'full_name', ''),
+    new.email,
+    'user'
+  );
   return new;
 end;
 $$;
@@ -246,7 +247,7 @@ stable
 security definer
 set search_path = public
 as $$
-  select exists (select 1 from public.profiles where id = auth.uid() and is_admin = true);
+  select exists (select 1 from public.profiles where id = auth.uid() and role = 'admin');
 $$;
 
 alter table public.profiles enable row level security;
@@ -283,6 +284,7 @@ create policy "Public can view product images" on public.product_images for sele
 
 create policy "Users can view their profile" on public.profiles for select using (auth.uid() = id);
 create policy "Users can update their profile" on public.profiles for update using (auth.uid() = id) with check (auth.uid() = id);
+revoke update (email, role, id, created_at) on public.profiles from authenticated;
 create policy "Users manage their addresses" on public.addresses for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
 create policy "Users manage their carts" on public.carts for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
 create policy "Users manage their cart items" on public.cart_items for all using (exists (
