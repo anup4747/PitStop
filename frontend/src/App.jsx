@@ -12,7 +12,7 @@ import {
   products as initialProducts,
 } from "./data/products";
 import "./App.css";
-import "./pages/Auth.css";
+import "./pages/styles/Auth.css";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";

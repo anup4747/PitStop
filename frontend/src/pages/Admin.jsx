@@ -6,7 +6,7 @@ import {
 } from "../data/products";
 import navLogoDark from "../assets/navLogo.png";
 import navLogoLight from "../assets/navLogolight.png";
-import "./Admin.css";
+import "./styles/Admin.css";
 
 // ── Initial Mock Data ──────────────────────────────────────
 const initialOrders = [

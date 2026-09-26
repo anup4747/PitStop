@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import './Team.css'
+import './styles/Team.css'
 
 const crewMembers = [
   {

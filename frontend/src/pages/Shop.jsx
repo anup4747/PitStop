@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import './Shop.css'
+import './styles/Shop.css'
 
 const icon = (name) => {
   const paths = {

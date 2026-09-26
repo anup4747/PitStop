@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getProfile, saveSession, signIn, signOut } from "../lib/auth";
-import "./Auth.css";
+import "./styles/Auth.css";
 
 function AdminLogin() {
   const [email, setEmail] = useState("");

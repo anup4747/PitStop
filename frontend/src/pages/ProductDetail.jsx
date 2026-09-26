@@ -1,8 +1,8 @@
 import { useState, useMemo, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { getRelatedProducts } from "../data/products";
-import "./ProductDetail.css";
-import "./Shop.css";
+import "./styles/ProductDetail.css";
+import "./styles/Shop.css";
 
 const icon = (name) => {
   const paths = {
