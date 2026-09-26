@@ -1,6 +1,6 @@
-import { useState, useMemo } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import './styles/Shop.css'
+import { useState, useMemo } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "./styles/Shop.css";
 
 const icon = (name) => {
   const paths = {
@@ -11,9 +11,7 @@ const icon = (name) => {
         <circle cx="18" cy="19" r="1.5" />
       </>
     ),
-    check: (
-      <path d="M20 6 9 17l-5-5" />
-    ),
+    check: <path d="M20 6 9 17l-5-5" />,
     search: (
       <>
         <circle cx="11" cy="11" r="6.5" />
@@ -33,8 +31,8 @@ const icon = (name) => {
     ),
     wrench: (
       <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
-    )
-  }
+    ),
+  };
   return (
     <svg
       className="icon"
@@ -48,72 +46,72 @@ const icon = (name) => {
     >
       {paths[name]}
     </svg>
-  )
-}
+  );
+};
 
 function Shop({ onAddToCart, search, setSearch, categories, products }) {
-  const navigate = useNavigate()
-  const [activeCategory, setActiveCategory] = useState('All Parts')
-  const [sortBy, setSortBy] = useState('featured')
-  const [onlyInStock, setOnlyInStock] = useState(false)
-  const [addedIds, setAddedIds] = useState({})
+  const navigate = useNavigate();
+  const [activeCategory, setActiveCategory] = useState("All Parts");
+  const [sortBy, setSortBy] = useState("featured");
+  const [onlyInStock, setOnlyInStock] = useState(false);
+  const [addedIds, setAddedIds] = useState({});
 
   // Category counts
   const categoryCounts = useMemo(() => {
-    const counts = { 'All Parts': products.length }
+    const counts = { "All Parts": products.length };
     categories.forEach((cat) => {
-      if (cat !== 'All Parts') {
-        counts[cat] = products.filter((p) => p.category === cat).length
+      if (cat !== "All Parts") {
+        counts[cat] = products.filter((p) => p.category === cat).length;
       }
-    })
-    return counts
-  }, [])
+    });
+    return counts;
+  }, []);
 
   // Filter and sort products
   const filteredProducts = useMemo(() => {
     let result = products.filter((product) => {
       const matchCategory =
-        activeCategory === 'All Parts' || product.category === activeCategory
-      const query = (search || '').toLowerCase().trim()
+        activeCategory === "All Parts" || product.category === activeCategory;
+      const query = (search || "").toLowerCase().trim();
       const matchSearch =
         !query ||
         product.name.toLowerCase().includes(query) ||
         product.category.toLowerCase().includes(query) ||
         product.shortDesc.toLowerCase().includes(query) ||
-        product.sku.toLowerCase().includes(query)
-      const matchStock = !onlyInStock || product.inStock
+        product.sku.toLowerCase().includes(query);
+      const matchStock = !onlyInStock || product.inStock;
 
-      return matchCategory && matchSearch && matchStock
-    })
+      return matchCategory && matchSearch && matchStock;
+    });
 
     // Sorting
-    if (sortBy === 'price-low') {
-      result.sort((a, b) => a.price - b.price)
-    } else if (sortBy === 'price-high') {
-      result.sort((a, b) => b.price - a.price)
-    } else if (sortBy === 'name-asc') {
-      result.sort((a, b) => a.name.localeCompare(b.name))
+    if (sortBy === "price-low") {
+      result.sort((a, b) => a.price - b.price);
+    } else if (sortBy === "price-high") {
+      result.sort((a, b) => b.price - a.price);
+    } else if (sortBy === "name-asc") {
+      result.sort((a, b) => a.name.localeCompare(b.name));
     }
 
-    return result
-  }, [activeCategory, search, onlyInStock, sortBy])
+    return result;
+  }, [activeCategory, search, onlyInStock, sortBy]);
 
   const handleQuickAdd = (e, product) => {
-    e.preventDefault()
-    e.stopPropagation()
-    onAddToCart()
-    setAddedIds((prev) => ({ ...prev, [product.id]: true }))
+    e.preventDefault();
+    e.stopPropagation();
+    onAddToCart();
+    setAddedIds((prev) => ({ ...prev, [product.id]: true }));
     setTimeout(() => {
-      setAddedIds((prev) => ({ ...prev, [product.id]: false }))
-    }, 1200)
-  }
+      setAddedIds((prev) => ({ ...prev, [product.id]: false }));
+    }, 1200);
+  };
 
   const handleResetFilters = () => {
-    setActiveCategory('All Parts')
-    if (setSearch) setSearch('')
-    setOnlyInStock(false)
-    setSortBy('featured')
-  }
+    setActiveCategory("All Parts");
+    if (setSearch) setSearch("");
+    setOnlyInStock(false);
+    setSortBy("featured");
+  };
 
   return (
     <div className="shop-page">
@@ -134,8 +132,9 @@ function Shop({ onAddToCart, search, setSearch, categories, products }) {
               Parts <em>Department.</em>
             </h1>
             <p className="lead">
-              Precision-machined powertrain, chassis, suspension, braking, and control components
-              homologated for competitive SAE BAJA, Formula Student, and high-performance racing builds.
+              Precision-machined powertrain, chassis, suspension, braking, and
+              control components homologated for competitive SAE BAJA, Formula
+              Student, and high-performance racing builds.
             </p>
           </div>
 
@@ -156,18 +155,24 @@ function Shop({ onAddToCart, search, setSearch, categories, products }) {
       <section className="shop-toolbar">
         {/* Top Row: Category Tabs */}
         <div className="shop-toolbar-top">
-          <div className="shop-cat-tabs" role="tablist" aria-label="Component Categories">
+          <div
+            className="shop-cat-tabs"
+            role="tablist"
+            aria-label="Component Categories"
+          >
             {categories.map((cat) => (
               <button
                 key={cat}
                 type="button"
                 role="tab"
                 aria-selected={activeCategory === cat}
-                className={`shop-cat-tab ${activeCategory === cat ? 'active' : ''}`}
+                className={`shop-cat-tab ${activeCategory === cat ? "active" : ""}`}
                 onClick={() => setActiveCategory(cat)}
               >
                 <span>{cat}</span>
-                <span className="shop-cat-count">{categoryCounts[cat] || 0}</span>
+                <span className="shop-cat-count">
+                  {categoryCounts[cat] || 0}
+                </span>
               </button>
             ))}
           </div>
@@ -176,12 +181,12 @@ function Shop({ onAddToCart, search, setSearch, categories, products }) {
         {/* Bottom Row: Search & Refinements */}
         <div className="shop-toolbar-bottom">
           <div className="shop-search-wrapper">
-            <span className="shop-search-icon">{icon('search')}</span>
+            <span className="shop-search-icon">{icon("search")}</span>
             <input
               type="text"
               className="shop-search-input"
               placeholder="Search by part name, SKU, or keyword..."
-              value={search || ''}
+              value={search || ""}
               onChange={(e) => setSearch && setSearch(e.target.value)}
               aria-label="Search catalog"
             />
@@ -189,10 +194,10 @@ function Shop({ onAddToCart, search, setSearch, categories, products }) {
               <button
                 type="button"
                 className="shop-search-clear"
-                onClick={() => setSearch && setSearch('')}
+                onClick={() => setSearch && setSearch("")}
                 aria-label="Clear search"
               >
-                {icon('close')}
+                {icon("close")}
               </button>
             )}
           </div>
@@ -226,13 +231,16 @@ function Shop({ onAddToCart, search, setSearch, categories, products }) {
       </section>
 
       {/* ── Active Filter Badges ── */}
-      {(activeCategory !== 'All Parts' || search || onlyInStock) && (
+      {(activeCategory !== "All Parts" || search || onlyInStock) && (
         <div className="shop-active-filters">
           <span>Active Filters:</span>
-          {activeCategory !== 'All Parts' && (
+          {activeCategory !== "All Parts" && (
             <span className="shop-filter-tag">
               Category: {activeCategory}
-              <button type="button" onClick={() => setActiveCategory('All Parts')}>
+              <button
+                type="button"
+                onClick={() => setActiveCategory("All Parts")}
+              >
                 ×
               </button>
             </span>
@@ -240,7 +248,7 @@ function Shop({ onAddToCart, search, setSearch, categories, products }) {
           {search && (
             <span className="shop-filter-tag">
               Search: "{search}"
-              <button type="button" onClick={() => setSearch && setSearch('')}>
+              <button type="button" onClick={() => setSearch && setSearch("")}>
                 ×
               </button>
             </span>
@@ -253,7 +261,11 @@ function Shop({ onAddToCart, search, setSearch, categories, products }) {
               </button>
             </span>
           )}
-          <button type="button" className="shop-reset-all" onClick={handleResetFilters}>
+          <button
+            type="button"
+            className="shop-reset-all"
+            onClick={handleResetFilters}
+          >
             Reset All
           </button>
         </div>
@@ -263,29 +275,38 @@ function Shop({ onAddToCart, search, setSearch, categories, products }) {
       <main className="shop-catalog">
         <div className="shop-results-meta">
           <span>
-            Showing <b>{filteredProducts.length}</b> of {products.length} components
+            Showing <b>{filteredProducts.length}</b> of {products.length}{" "}
+            components
           </span>
-          {activeCategory !== 'All Parts' && <span>Division: {activeCategory}</span>}
+          {activeCategory !== "All Parts" && (
+            <span>Division: {activeCategory}</span>
+          )}
         </div>
 
         {filteredProducts.length === 0 ? (
           <div className="shop-empty-state">
             <h3>No Racing Components Found</h3>
-            <p>We couldn't find any parts matching your specific filter criteria.</p>
-            <button type="button" className="button button-red" onClick={handleResetFilters}>
+            <p>
+              We couldn't find any parts matching your specific filter criteria.
+            </p>
+            <button
+              type="button"
+              className="button button-red"
+              onClick={handleResetFilters}
+            >
               Reset Filters
             </button>
           </div>
         ) : (
           <div className="shop-grid">
             {filteredProducts.map((product) => {
-              const isAdded = addedIds[product.id]
-              const specKeys = Object.keys(product.specs || {})
-              const firstTwoSpecs = specKeys.slice(0, 2)
+              const isAdded = addedIds[product.id];
+              const specKeys = Object.keys(product.specs || {});
+              const firstTwoSpecs = specKeys.slice(0, 2);
 
               const handleNavigate = () => {
-                navigate(`/product/${product.id}`)
-              }
+                navigate(`/product/${product.id}`);
+              };
 
               return (
                 <article
@@ -295,15 +316,19 @@ function Shop({ onAddToCart, search, setSearch, categories, products }) {
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault()
-                      handleNavigate()
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleNavigate();
                     }
                   }}
                   aria-label={`View ${product.name} details`}
                 >
                   <div className="shop-card-image-wrap">
-                    <img src={product.images[0]} alt={product.name} loading="lazy" />
+                    <img
+                      src={product.images[0]}
+                      alt={product.name}
+                      loading="lazy"
+                    />
                     <span className="shop-card-badge">{product.badge}</span>
                     <div className="shop-card-stock-dot">
                       <span className="stock-indicator" />
@@ -316,7 +341,7 @@ function Shop({ onAddToCart, search, setSearch, categories, products }) {
                       aria-label={`Add ${product.name} to cart`}
                       title="Quick Add to Cart"
                     >
-                      {isAdded ? icon('check') : icon('cart')}
+                      {isAdded ? icon("check") : icon("cart")}
                     </button>
                   </div>
 
@@ -327,7 +352,9 @@ function Shop({ onAddToCart, search, setSearch, categories, products }) {
                     </div>
 
                     <h3 className="shop-card-title">
-                      <span className="shop-card-title-text">{product.name}</span>
+                      <span className="shop-card-title-text">
+                        {product.name}
+                      </span>
                     </h3>
 
                     <p className="shop-card-desc">{product.shortDesc}</p>
@@ -336,7 +363,7 @@ function Shop({ onAddToCart, search, setSearch, categories, products }) {
                       <div className="shop-card-specs-pill">
                         {firstTwoSpecs.map((key) => (
                           <span className="shop-spec-badge" key={key}>
-                            {key}: {product.specs[key].split('(')[0].trim()}
+                            {key}: {product.specs[key].split("(")[0].trim()}
                           </span>
                         ))}
                       </div>
@@ -344,7 +371,9 @@ function Shop({ onAddToCart, search, setSearch, categories, products }) {
 
                     <div className="shop-card-footer">
                       <div className="shop-card-price-box">
-                        <span className="shop-card-price">${product.price}</span>
+                        <span className="shop-card-price">
+                          ${product.price}
+                        </span>
                         {product.originalPrice && (
                           <span className="shop-card-original-price">
                             ${product.originalPrice}
@@ -353,12 +382,12 @@ function Shop({ onAddToCart, search, setSearch, categories, products }) {
                       </div>
 
                       <span className="shop-card-action-link">
-                        Inspect {icon('arrowRight')}
+                        Inspect {icon("arrowRight")}
                       </span>
                     </div>
                   </div>
                 </article>
-              )
+              );
             })}
           </div>
         )}
@@ -371,17 +400,18 @@ function Shop({ onAddToCart, search, setSearch, categories, products }) {
             </p>
             <h3>Need Custom Tolerances or Rulebook Clearance?</h3>
             <p>
-              Our Lead Powertrain and Chassis Engineers offer custom tube bending, gear profiling,
-              and dyno calibration for collegiate teams and privateer racers.
+              Our Lead Powertrain and Chassis Engineers offer custom tube
+              bending, gear profiling, and dyno calibration for collegiate teams
+              and privateer racers.
             </p>
           </div>
           <Link to="/team" className="shop-banner-btn">
-            Consult Dyno Lab {icon('arrowRight')}
+            Consult Dyno Lab {icon("arrowRight")}
           </Link>
         </aside>
       </main>
     </div>
-  )
+  );
 }
 
-export default Shop
+export default Shop;
