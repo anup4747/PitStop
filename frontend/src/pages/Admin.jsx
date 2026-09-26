@@ -298,6 +298,7 @@ function Admin({ theme = "dark", onToggleTheme, onLogout, session }) {
   }, []);
 
   const fullName = session?.user?.user_metadata?.full_name || "PitStop Admin";
+  const firstName = fullName.split(" ")[0];
   const email = session?.user?.email || "Admin account";
   const initials = fullName
     .split(" ")
@@ -329,6 +330,10 @@ function Admin({ theme = "dark", onToggleTheme, onLogout, session }) {
   const [restockReason, setRestockReason] = useState("New Purchase");
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [savedBannerMsg, setSavedBannerMsg] = useState("");
+
+  // Edit Product State
+  const [editingProduct, setEditingProduct] = useState(null); // holds product being edited
+  const [editForm, setEditForm] = useState(null);             // form field values for edit
 
   // Search & Filter States
   const [productQuery, setProductQuery] = useState("");
@@ -455,6 +460,62 @@ function Admin({ theme = "dark", onToggleTheme, onLogout, session }) {
       setProducts(products.filter((p) => p.id !== id));
       showNotification("Product removed.");
     }
+  };
+
+  const openEditProduct = (p) => {
+    setEditingProduct(p);
+    setEditForm({
+      name: p.name,
+      sku: p.sku || "",
+      category: p.category,
+      description: p.shortDesc || p.fullDesc || "",
+      price: String(p.price),
+      discountPrice: p.originalPrice ? String(p.originalPrice) : "",
+      stockCount: String(p.stockCount),
+      brand: p.specs?.Brand || "",
+      material: p.specs?.Material || "",
+      weight: p.specs?.Weight || "",
+      compatibleKart: p.compatible || "",
+      partNumber: p.specs?.PartNumber || "",
+    });
+    setProductsSubView("Edit");
+  };
+
+  const handleSaveEditProduct = (e) => {
+    e.preventDefault();
+    if (!editForm.name || !editForm.price) return;
+    setProducts(
+      products.map((p) =>
+        p.id === editingProduct.id
+          ? {
+              ...p,
+              name: editForm.name,
+              sku: editForm.sku || p.sku,
+              category: editForm.category,
+              price: Number(editForm.price),
+              originalPrice: editForm.discountPrice
+                ? Number(editForm.discountPrice)
+                : p.originalPrice,
+              stockCount: Number(editForm.stockCount) || p.stockCount,
+              inStock: Number(editForm.stockCount) > 0,
+              shortDesc: editForm.description || p.shortDesc,
+              fullDesc: editForm.description || p.fullDesc,
+              specs: {
+                ...p.specs,
+                Brand: editForm.brand,
+                Material: editForm.material,
+                Weight: editForm.weight,
+                PartNumber: editForm.partNumber || p.specs?.PartNumber,
+              },
+              compatible: editForm.compatibleKart,
+            }
+          : p,
+      ),
+    );
+    setProductsSubView("All");
+    setEditingProduct(null);
+    setEditForm(null);
+    showNotification("Product updated successfully!");
   };
 
   const handleUpdateOrderStatus = (orderId, newStatus) => {
@@ -792,7 +853,7 @@ function Admin({ theme = "dark", onToggleTheme, onLogout, session }) {
             {/* Welcome banner */}
             <div className="dashboard-welcome-card">
               <div>
-                <h2>Welcome, Admin 👋</h2>
+                <h2>Welcome, {firstName} 👋</h2>
                 <p>
                   Here is your daily store overview. Keep low-stock parts
                   replenished to avoid missed sales.
@@ -1113,6 +1174,14 @@ function Admin({ theme = "dark", onToggleTheme, onLogout, session }) {
                               <button
                                 type="button"
                                 className="action-icon-btn"
+                                title="Edit product"
+                                onClick={() => openEditProduct(p)}
+                              >
+                                {icon("edit")}
+                              </button>
+                              <button
+                                type="button"
+                                className="action-icon-btn"
                                 title="Restock item"
                                 onClick={() => setRestockProduct(p)}
                               >
@@ -1364,6 +1433,171 @@ function Admin({ theme = "dark", onToggleTheme, onLogout, session }) {
                       type="button"
                       className="admin-btn-secondary"
                       onClick={() => setProductsSubView("All")}
+                    >
+                      Discard
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
+
+            {/* Sub-view: Edit Product Form */}
+            {productsSubView === "Edit" && editForm && (
+              <div className="admin-card product-form-card">
+                <div className="admin-card-header">
+                  <div>
+                    <h3>Edit Product</h3>
+                    <p>
+                      Update the details for <strong>{editingProduct?.name}</strong>.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    className="admin-btn-secondary"
+                    onClick={() => { setProductsSubView("All"); setEditingProduct(null); setEditForm(null); }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+
+                <form onSubmit={handleSaveEditProduct} className="new-product-form">
+                  {/* Section 1: Information */}
+                  <fieldset className="form-fieldset">
+                    <legend>1. Product Information</legend>
+                    <div className="form-grid-2">
+                      <label className="form-field">
+                        <span>Product Name *</span>
+                        <input
+                          type="text"
+                          required
+                          value={editForm.name}
+                          onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                        />
+                      </label>
+                      <label className="form-field">
+                        <span>SKU / Part Code</span>
+                        <input
+                          type="text"
+                          value={editForm.sku}
+                          onChange={(e) => setEditForm({ ...editForm, sku: e.target.value })}
+                        />
+                      </label>
+                    </div>
+
+                    <div className="form-grid-2">
+                      <label className="form-field">
+                        <span>Category *</span>
+                        <select
+                          value={editForm.category}
+                          onChange={(e) => setEditForm({ ...editForm, category: e.target.value })}
+                        >
+                          {categories.map((c) => (
+                            <option key={c} value={c}>{c}</option>
+                          ))}
+                        </select>
+                      </label>
+                      <label className="form-field">
+                        <span>Part Number</span>
+                        <input
+                          type="text"
+                          value={editForm.partNumber}
+                          onChange={(e) => setEditForm({ ...editForm, partNumber: e.target.value })}
+                        />
+                      </label>
+                    </div>
+
+                    <label className="form-field">
+                      <span>Description</span>
+                      <textarea
+                        rows="3"
+                        value={editForm.description}
+                        onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
+                      />
+                    </label>
+                  </fieldset>
+
+                  {/* Section 2: Pricing & Inventory */}
+                  <fieldset className="form-fieldset">
+                    <legend>2. Pricing & Inventory</legend>
+                    <div className="form-grid-3">
+                      <label className="form-field">
+                        <span>Selling Price (₹) *</span>
+                        <input
+                          type="number"
+                          required
+                          min="1"
+                          value={editForm.price}
+                          onChange={(e) => setEditForm({ ...editForm, price: e.target.value })}
+                        />
+                      </label>
+                      <label className="form-field">
+                        <span>Discounted Price / MRP (₹)</span>
+                        <input
+                          type="number"
+                          value={editForm.discountPrice}
+                          onChange={(e) => setEditForm({ ...editForm, discountPrice: e.target.value })}
+                        />
+                      </label>
+                      <label className="form-field">
+                        <span>Stock Quantity *</span>
+                        <input
+                          type="number"
+                          required
+                          min="0"
+                          value={editForm.stockCount}
+                          onChange={(e) => setEditForm({ ...editForm, stockCount: e.target.value })}
+                        />
+                      </label>
+                    </div>
+                  </fieldset>
+
+                  {/* Section 3: Specifications */}
+                  <fieldset className="form-fieldset">
+                    <legend>3. Specifications (Optional)</legend>
+                    <div className="form-grid-3">
+                      <label className="form-field">
+                        <span>Brand</span>
+                        <input
+                          type="text"
+                          value={editForm.brand}
+                          onChange={(e) => setEditForm({ ...editForm, brand: e.target.value })}
+                        />
+                      </label>
+                      <label className="form-field">
+                        <span>Material</span>
+                        <input
+                          type="text"
+                          value={editForm.material}
+                          onChange={(e) => setEditForm({ ...editForm, material: e.target.value })}
+                        />
+                      </label>
+                      <label className="form-field">
+                        <span>Weight</span>
+                        <input
+                          type="text"
+                          value={editForm.weight}
+                          onChange={(e) => setEditForm({ ...editForm, weight: e.target.value })}
+                        />
+                      </label>
+                    </div>
+                    <label className="form-field">
+                      <span>Compatible Kart / Series</span>
+                      <input
+                        type="text"
+                        value={editForm.compatibleKart}
+                        onChange={(e) => setEditForm({ ...editForm, compatibleKart: e.target.value })}
+                      />
+                    </label>
+                  </fieldset>
+
+                  <div className="form-actions-row">
+                    <button type="submit" className="admin-btn-primary">
+                      {icon("check")} Save Changes
+                    </button>
+                    <button
+                      type="button"
+                      className="admin-btn-secondary"
+                      onClick={() => { setProductsSubView("All"); setEditingProduct(null); setEditForm(null); }}
                     >
                       Discard
                     </button>
