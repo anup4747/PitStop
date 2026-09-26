@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import './Shop.css'
 
 const icon = (name) => {
@@ -52,6 +52,7 @@ const icon = (name) => {
 }
 
 function Shop({ onAddToCart, search, setSearch, categories, products }) {
+  const navigate = useNavigate()
   const [activeCategory, setActiveCategory] = useState('All Parts')
   const [sortBy, setSortBy] = useState('featured')
   const [onlyInStock, setOnlyInStock] = useState(false)
@@ -282,8 +283,25 @@ function Shop({ onAddToCart, search, setSearch, categories, products }) {
               const specKeys = Object.keys(product.specs || {})
               const firstTwoSpecs = specKeys.slice(0, 2)
 
+              const handleNavigate = () => {
+                navigate(`/product/${product.id}`)
+              }
+
               return (
-                <article className="shop-card" key={product.id}>
+                <article
+                  className="shop-card"
+                  key={product.id}
+                  onClick={handleNavigate}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      handleNavigate()
+                    }
+                  }}
+                  aria-label={`View ${product.name} details`}
+                >
                   <div className="shop-card-image-wrap">
                     <img src={product.images[0]} alt={product.name} loading="lazy" />
                     <span className="shop-card-badge">{product.badge}</span>
@@ -309,7 +327,7 @@ function Shop({ onAddToCart, search, setSearch, categories, products }) {
                     </div>
 
                     <h3 className="shop-card-title">
-                      <Link to={`/product/${product.id}`}>{product.name}</Link>
+                      <span className="shop-card-title-text">{product.name}</span>
                     </h3>
 
                     <p className="shop-card-desc">{product.shortDesc}</p>
@@ -334,12 +352,9 @@ function Shop({ onAddToCart, search, setSearch, categories, products }) {
                         )}
                       </div>
 
-                      <Link
-                        to={`/product/${product.id}`}
-                        className="shop-card-action-link"
-                      >
+                      <span className="shop-card-action-link">
                         Inspect {icon('arrowRight')}
-                      </Link>
+                      </span>
                     </div>
                   </div>
                 </article>
